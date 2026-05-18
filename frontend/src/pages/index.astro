@@ -272,7 +272,41 @@ const testimonials = await client.fetch(`*[_type == "testimonial"] | order(_crea
         </div>
     </section>
 
-    <footer class="footer" id="contact">
+    <section class="section" id="contact">
+        <div class="section-inner">
+            <div class="contact-grid">
+                <div class="contact-text reveal">
+                    <span class="section-label">Get in Touch</span>
+                    <h2 class="section-title" style="margin-bottom: 24px;">Let's build something<br>incredible.</h2>
+                    <p class="hero-description" style="margin-bottom: 0;">Have a project in mind or want to collaborate? Drop us a message and we'll get back to you within 24 hours.</p>
+                </div>
+                
+                <div class="contact-form-wrapper reveal reveal-d2">
+                    <form action="https://api.web3forms.com/submit" method="POST" class="contact-form">
+                        <input type="hidden" name="access_key" value="1bc1a301-09ae-4641-ba23-6046069f32a1">
+                        <input type="hidden" name="subject" value="New Project Inquiry - Studio A4">
+                        
+                        <div class="form-group">
+                            <input type="text" name="name" placeholder="Your Name" required class="form-input">
+                        </div>
+                        <div class="form-group">
+                            <input type="email" name="email" placeholder="Your Email Address" required class="form-input">
+                        </div>
+                        <div class="form-group">
+                            <textarea name="message" placeholder="Tell us about your project..." required class="form-input form-textarea"></textarea>
+                        </div>
+                        
+                        <button type="submit" class="btn btn-primary" style="width: 100%; justify-content: center;">
+                            Send Message
+                            <span class="arrow-icon">→</span>
+                        </button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <footer class="footer">
         <div class="footer-inner">
             <div class="footer-brand">
                 <h3>A<span>4</span></h3>

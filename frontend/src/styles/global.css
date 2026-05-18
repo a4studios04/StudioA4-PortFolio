@@ -351,6 +351,49 @@ body {
     100% { transform: translateX(calc(-100% - 32px)); }
 }
 
+/* CONTACT SECTION */
+.contact-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 80px;
+    align-items: center;
+}
+.contact-form-wrapper {
+    background: var(--bg-secondary);
+    padding: 48px;
+    border-radius: var(--radius-xl);
+    border: 1px solid var(--border-subtle);
+}
+.contact-form {
+    display: flex;
+    flex-direction: column;
+    gap: 24px;
+}
+.form-input {
+    width: 100%;
+    background: rgba(255, 255, 255, 0.03);
+    border: 1px solid var(--border-medium);
+    border-radius: var(--radius-md);
+    padding: 18px 24px;
+    color: var(--text-primary);
+    font-family: var(--font-body);
+    font-size: 1rem;
+    transition: var(--transition-fast);
+}
+.form-input::placeholder {
+    color: var(--text-muted);
+}
+.form-input:focus {
+    outline: none;
+    border-color: var(--accent);
+    background: rgba(255, 255, 255, 0.05);
+    box-shadow: 0 0 0 4px var(--accent-glow);
+}
+.form-textarea {
+    min-height: 160px;
+    resize: vertical;
+}
+
 /* FOOTER */
 .footer { background: var(--bg-secondary); padding: 80px 60px 40px; border-top: 1px solid var(--border-subtle); }
 .footer-inner { max-width: 1280px; margin: 0 auto; display: grid; grid-template-columns: 2fr repeat(3, 1fr); gap: 60px; }
@@ -381,6 +424,7 @@ body {
     .work-grid { grid-template-columns: 1fr 1fr; }
     .services-grid { grid-template-columns: 1fr 1fr; }
     .about-grid { grid-template-columns: 1fr; gap: 50px; }
+    .contact-grid { grid-template-columns: 1fr; gap: 48px; }
     .footer-inner { grid-template-columns: 1fr 1fr; }
     .marquee-track span { font-size: 2.2rem; }
 }
@@ -393,6 +437,7 @@ body {
     .hero-scroll { left: 20px; bottom: 24px; }
     .work-grid { grid-template-columns: 1fr; gap: 10px; }
     .services-grid { grid-template-columns: 1fr; gap: 40px; }
+    .contact-form-wrapper { padding: 32px 24px; }
     .footer { padding: 50px 20px 30px; }
     .footer-inner { grid-template-columns: 1fr; gap: 36px; }
     .about-stats { gap: 28px; flex-wrap: wrap; }
