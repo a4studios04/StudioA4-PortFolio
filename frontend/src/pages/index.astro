@@ -235,7 +235,7 @@ const testimonials = await client.fetch(`*[_type == "testimonial"] | order(_crea
             <div class="testimonials-grid">
                 {testimonials.map((review, index) => (
                     <div class={`testimonial-card reveal reveal-d${(index % 4) + 1}`}>
-                        <p class="testimonial-quote">"{review.quote}"</p>
+                        <p class="testimonial-quote">{review.quote}</p>
                         <div class="testimonial-author">
                             <svg class="testimonial-avatar" viewBox="0 0 48 48" xmlns="http://www.w3.org/2000/svg">
                                 <circle cx="24" cy="24" r="24" fill="#334155"/>
