@@ -1,0 +1,361 @@
+---
+import '../styles/global.css';
+import { client, urlFor } from '../utils/sanity.js';
+
+// Fetch Projects
+const projects = await client.fetch(`*[_type == "project"] | order(projectNumber asc)`);
+
+// Fetch Testimonials
+const testimonials = await client.fetch(`*[_type == "testimonial"]`);
+---
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Studio A4 — Creative Design Studio</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link href="https://fonts.googleapis.com/css2?family=DM+Sans:opsz,wght@9..40,300;9..40,400;9..40,500;9..40,600;9..40,700;9..40,800&family=Syne:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+</head>
+<body>
+
+    <nav class="nav" id="navbar">
+        <a href="#" class="nav-logo">A<span>4</span></a>
+        <ul class="nav-links">
+            <li><a href="#work">Work</a></li>
+            <li><a href="#services">Expertise</a></li>
+            <li><a href="#about">About</a></li>
+            <li><a href="#contact">Contact</a></li>
+        </ul>
+        <button class="nav-hamburger" id="hamburger" aria-label="Menu">
+            <span></span><span></span><span></span>
+        </button>
+    </nav>
+
+    <div class="mobile-menu" id="mobileMenu">
+        <ul>
+            <li><a href="#work" class="mobile-link">Work</a></li>
+            <li><a href="#services" class="mobile-link">Expertise</a></li>
+            <li><a href="#about" class="mobile-link">About</a></li>
+            <li><a href="#contact" class="mobile-link">Contact</a></li>
+        </ul>
+    </div>
+
+    <section class="hero" id="home">
+        <div class="hero-bg">
+            <div class="orb orb-1"></div>
+            <div class="orb orb-2"></div>
+        </div>
+        <div class="hero-content">
+            <span class="hero-tag">● Creative Studio — Est. 2020</span>
+            <h1 class="hero-headline">
+                We craft<br>
+                <span class="italic">striking</span> digital<br>
+                worlds.
+            </h1>
+            <p class="hero-description">
+                A creative studio specializing in high-end 3D & 2D art, concept design, and visual development. We blend stylized aesthetics with compelling storytelling to build projects that leave a lasting impact.
+            </p>
+            <div class="hero-cta">
+                <a href="#work" class="btn btn-primary">
+                    View Our Work
+                    <span class="arrow-icon">↘</span>
+                </a>
+                <a href="#contact" class="btn btn-outline">
+                    Start a Project
+                    <span class="arrow-icon">→</span>
+                </a>
+            </div>
+        </div>
+    </section>
+
+    <div class="marquee-section">
+        <div class="marquee-track">
+            <span class="filled">Illustration</span>
+            <span>✦</span>
+            <span>Concept Art</span>
+            <span>✦</span>
+            <span class="filled">Character Design</span>
+            <span>✦</span>
+            <span>Background Art</span>
+            <span>✦</span>
+            <span class="filled">Visual Dev</span>
+            <span>✦</span>
+            <span class="filled">Illustration</span>
+            <span>✦</span>
+            <span>Concept Art</span>
+            <span>✦</span>
+            <span class="filled">Character Design</span>
+            <span>✦</span>
+            <span>Background Art</span>
+            <span>✦</span>
+            <span class="filled">Visual Dev</span>
+            <span>✦</span>
+        </div>
+    </div>
+
+    <section class="section" id="work">
+        <div class="section-inner">
+            <span class="section-label reveal">Selected Projects</span>
+            <h2 class="section-title reveal reveal-d1">Recent work we're<br>proud of.</h2>
+            <div class="work-grid">
+                {projects.map((project, index) => (
+                    <div class={`work-item reveal reveal-d${(index % 4) + 1}`}>
+                        <div class="work-item-inner">
+                            {project.mainImage && (
+                                <img 
+                                    src={urlFor(project.mainImage).width(800).url()} 
+                                    alt={project.title} 
+                                    class="work-item-bg"
+                                    loading="lazy"
+                                />
+                            )}
+                            <div class="work-item-overlay">
+                                <span class="work-item-tag">{project.tag}</span>
+                                <span class="work-item-title">{project.title}</span>
+                                <span class="work-item-subtitle">{project.subtitle}</span>
+                            </div>
+                            <span class="work-item-number">{project.projectNumber}</span>
+                        </div>
+                    </div>
+                ))}
+            </div>
+        </div>
+    </section>
+
+    <section class="section" id="services">
+        <div class="section-inner">
+            <span class="section-label reveal">Expertise</span>
+            <h2 class="section-title reveal reveal-d1">Designing worlds<br>that feel alive.</h2>
+            
+            <div class="services-grid">
+                <div class="service-card reveal reveal-d1">
+                    <div class="service-image">
+                        <div class="service-badge">3D</div>
+                        <img src="https://images.unsplash.com/photo-1605810230434-7631ac76ec81?q=80&w=800&auto=format&fit=crop" alt="3D Art & Visuals" class="img-content">
+                    </div>
+                    <h3 class="service-title"><span class="accent-num">1.</span> 3D Art & Visuals</h3>
+                    <p class="service-desc">High-quality 3D renders, key visuals, and cinematic compositions for games, brands, music, and digital experiences.</p>
+                    <div class="service-tags">MODELING &bull; TEXTURING &bull; LIGHTING &bull; RENDERING</div>
+                </div>
+
+                <div class="service-card reveal reveal-d2">
+                    <div class="service-image">
+                        <div class="service-badge">2D</div>
+                        <img src="https://images.unsplash.com/photo-1578632767115-351597cf2477?q=80&w=800&auto=format&fit=crop" alt="2D Art & Illustration" class="img-content">
+                    </div>
+                    <h3 class="service-title"><span class="accent-num">2.</span> 2D Art & Illustration</h3>
+                    <p class="service-desc">Stylized illustrations and key art with strong composition, color, and mood to tell powerful stories and build striking visuals.</p>
+                    <div class="service-tags">CONCEPT ART &bull; ILLUSTRATION &bull; KEY VISUALS</div>
+                </div>
+
+                <div class="service-card reveal reveal-d3">
+                    <div class="service-image">
+                        <div class="service-badge">
+                            <svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="18" height="18" rx="2" ry="2"></rect><line x1="12" y1="3" x2="12" y2="21"></line></svg>
+                        </div>
+                        <img src="https://images.unsplash.com/photo-1612480797665-c96d261eae09?q=80&w=800&auto=format&fit=crop" alt="Manga Panels" class="img-content">
+                    </div>
+                    <h3 class="service-title"><span class="accent-num">3.</span> Manga Panels</h3>
+                    <p class="service-desc">Dynamic manga panels and comic layouts crafted for storytelling, rhythm, and high visual impact.</p>
+                    <div class="service-tags">PANELING &bull; INKING &bull; TONES &bull; COMPOSITION</div>
+                </div>
+
+                <div class="service-card reveal reveal-d4">
+                    <div class="service-image">
+                        <div class="service-badge">
+                            <svg viewBox="0 0 24 24" fill="none" stroke-width="2"><path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"></path><polyline points="3.27 6.96 12 12.01 20.73 6.96"></polyline><line x1="12" y1="22.08" x2="12" y2="12"></line></svg>
+                        </div>
+                        <img src="https://images.unsplash.com/photo-1618336753974-aae8e04506aa?q=80&w=800&auto=format&fit=crop" alt="Environment Design" class="img-content">
+                    </div>
+                    <h3 class="service-title"><span class="accent-num">4.</span> Environment Design</h3>
+                    <p class="service-desc">Immersive environments and worldbuilding designs for games, animation, and cinematic projects.</p>
+                    <div class="service-tags">WORLD BUILDING &bull; 3D ENVIRONMENTS &bull; MATTE PAINTING</div>
+                </div>
+
+                <div class="service-card reveal reveal-d5">
+                    <div class="service-image">
+                        <div class="service-badge">
+                            <svg viewBox="0 0 24 24" fill="none" stroke-width="2"><polygon points="5 3 19 12 5 21 5 3"></polygon></svg>
+                        </div>
+                        <img src="https://images.unsplash.com/photo-1550684848-fac1c5b4e853?q=80&w=800&auto=format&fit=crop" alt="Motion Design & Animation" class="img-content">
+                    </div>
+                    <h3 class="service-title"><span class="accent-num">5.</span> Motion Design & Animation</h3>
+                    <p class="service-desc">Cinematic animations, motion graphics, and visual effects that bring ideas to life with rhythm and impact.</p>
+                    <div class="service-tags">ANIMATION &bull; VFX &bull; MOTION GRAPHICS &bull; COMPOSITING</div>
+                </div>
+
+                <div class="service-card reveal reveal-d6">
+                    <div class="service-image">
+                        <div class="service-badge">
+                            <svg viewBox="0 0 24 24" fill="none" stroke-width="2"><rect x="3" y="3" width="18" height="18" rx="2" ry="2"></rect><line x1="3" y1="9" x2="21" y2="9"></line><line x1="9" y1="21" x2="9" y2="9"></line></svg>
+                        </div>
+                        <img src="https://images.unsplash.com/photo-1618761714954-0b8cd0026356?q=80&w=800&auto=format&fit=crop" alt="UI/UX & Visual Design" class="img-content">
+                    </div>
+                    <h3 class="service-title"><span class="accent-num">6.</span> UI/UX & Visual Design</h3>
+                    <p class="service-desc">Clean, modern, and immersive UI/UX design that blends aesthetics with functionality for web and digital products.</p>
+                    <div class="service-tags">UI DESIGN &bull; UX FLOW &bull; PROTOTYPES &bull; SYSTEMS</div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section class="section" id="about">
+        <div class="section-inner">
+            <div class="about-grid">
+                <div class="about-visual reveal">
+                    <div class="about-img-wrap">
+                        <img 
+                            src="/assets/about-pic.jpg" 
+                            alt="Studio A4 Creative Duo" 
+                            class="about-portrait"
+                        />
+                    </div>
+                    <div class="about-accent-box"></div>
+                </div>
+                <div class="about-text">
+                    <span class="section-label reveal">About</span>
+                    <h2 class="reveal reveal-d1">Designing worlds<br>that feel alive.</h2>
+                    <p class="reveal reveal-d2">
+                        StudioA4 is a creative driven by a passion for stylized 2D/3D aesthetics, character design, and compelling visual development.
+                    </p>
+                    <p class="reveal reveal-d3">
+                        Whether it is an anime-inspired key illustration or full conceptual worldbuilding, our approach is focused on pushing boundaries. No corporate fluff — just exceptional, stylized work.
+                    </p>
+                    <div class="about-stats reveal reveal-d4">
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section class="section" style="background:var(--bg-secondary);">
+        <div class="section-inner">
+            <div class="testimonials-grid">
+                {testimonials.map((review, index) => (
+                    <div class={`testimonial-card reveal reveal-d${(index % 4) + 1}`}>
+                        <p class="testimonial-quote">"{review.quote}"</p>
+                        <div class="testimonial-author">
+                            <svg class="testimonial-avatar" viewBox="0 0 48 48" xmlns="http://www.w3.org/2000/svg">
+                                <circle cx="24" cy="24" r="24" fill="#334155"/>
+                                <circle cx="24" cy="18" r="9" fill="#94a3b8"/>
+                                <ellipse cx="24" cy="40" rx="16" ry="10" fill="#94a3b8"/>
+                            </svg>
+                            <div>
+                                <h4>{review.clientName}</h4>
+                                <span>{review.clientTitle || 'Client'}</span>
+                            </div>
+                        </div>
+                    </div>
+                ))}
+            </div>
+        </div>
+    </section>
+
+    <footer class="footer" id="contact">
+        <div class="footer-inner">
+            <div class="footer-brand">
+                <h3>A<span>4</span></h3>
+                <p>A creative studio crafting bold visual experiences for ambitious projects worldwide.</p>
+            </div>
+            <div class="footer-links">
+                <h4>Navigation</h4>
+                <a href="#home">Home</a>
+                <a href="#work">Work</a>
+                <a href="#services">Expertise</a>
+                <a href="#about">About</a>
+                <a href="#contact">Contact</a>
+            </div>
+            <div class="footer-links">
+                <h4>Socials</h4>
+                <a href="https://www.instagram.com/xyro.3d/" target="_blank" rel="noopener noreferrer">Instagram</a>
+                <a href="https://x.com/Aman67804627885" target="_blank" rel="noopener noreferrer">X / Twitter</a>
+                <a href="https://www.reddit.com/user/Professional-Lake843/" target="_blank" rel="noopener noreferrer">Reddit</a>
+            </div>
+            <div class="footer-links">
+                <h4>Portfolios</h4>
+                <a href="https://www.artstation.com/aman_xyro" target="_blank" rel="noopener noreferrer">ArtStation</a>
+                <a href="https://www.deviantart.com/aman2189" target="_blank" rel="noopener noreferrer">DeviantArt</a>
+                <a href="https://pin.it/1EkhjFukQ" target="_blank" rel="noopener noreferrer">Pinterest</a>
+            </div>
+        </div>
+        <div class="footer-bottom">
+            <span>© 2026 Studio A4. All rights reserved.</span>
+        </div>
+    </footer>
+
+    <script>
+        // MOBILE MENU
+        const hamburger = document.getElementById('hamburger');
+        const mobileMenu = document.getElementById('mobileMenu');
+        const mobileLinks = document.querySelectorAll('.mobile-link');
+
+        if (hamburger && mobileMenu) {
+            hamburger.addEventListener('click', () => {
+                hamburger.classList.toggle('active');
+                mobileMenu.classList.toggle('active');
+                document.body.style.overflow = mobileMenu.classList.contains('active') ? 'hidden' : '';
+            });
+        }
+
+        if (mobileLinks) {
+            mobileLinks.forEach(link => {
+                link.addEventListener('click', () => {
+                    hamburger.classList.remove('active');
+                    mobileMenu.classList.remove('active');
+                    document.body.style.overflow = '';
+                });
+            });
+        }
+
+        // ULTRA-RESPONSIVE INTERSECTION OBSERVER FOR CHROME/ASTRO
+        const revealEls = document.querySelectorAll('.reveal');
+        if (revealEls.length > 0) {
+            const revealObserver = new IntersectionObserver((entries) => {
+                entries.forEach(entry => {
+                    if (entry.isIntersecting) {
+                        entry.target.classList.add('visible');
+                        revealObserver.unobserve(entry.target);
+                    }
+                });
+            }, { 
+                threshold: 0.01, // Triggers instantly when 1% of section enters viewport
+                rootMargin: '0px 0px -40px 0px'
+            });
+
+            revealEls.forEach(el => revealObserver.observe(el));
+        }
+
+        // PARALLAX ORB ON MOUSE MOVE
+        const orb1 = document.querySelector('.orb-1');
+        const orb2 = document.querySelector('.orb-2');
+        document.addEventListener('mousemove', (e) => {
+            const x = (e.clientX - window.innerWidth / 2) / 60;
+            const y = (e.clientY - window.innerHeight / 2) / 60;
+            if (orb1) orb1.style.transform = `translate(${x * 18}px, ${y * 18}px)`;
+            if (orb2) orb2.style.transform = `translate(${-x * 14}px, ${-y * 14}px)`;
+        });
+
+        // ACTIVE NAV LINK ON SCROLL
+        const sections = document.querySelectorAll('section[id]');
+        const navLinksAll = document.querySelectorAll('.nav-links a');
+        window.addEventListener('scroll', () => {
+            let current = '';
+            sections.forEach(section => {
+                const sectionTop = section.offsetTop - 120;
+                if (window.scrollY >= sectionTop) {
+                    current = section.getAttribute('id');
+                }
+            });
+            navLinksAll.forEach(link => {
+                if(link.getAttribute('href') === '#' + current) {
+                    link.style.color = '#ff4d4d';
+                } else {
+                    link.style.color = '#fff';
+                }
+            });
+        });
+    </script>
+</body>
+</html>
