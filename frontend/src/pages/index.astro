@@ -155,7 +155,7 @@ const testimonials = await client.fetch(`*[_type == "testimonial"] | order(_crea
                         <div class="service-badge">
                             <svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="18" height="18" rx="2" ry="2"></rect><line x1="12" y1="3" x2="12" y2="21"></line></svg>
                         </div>
-                        <img src=<img src="https://images.unsplash.com/photo-1607604276583-eef5d076aa5f?q=80&w=800&auto=format&fit=crop" alt="Manga Panels" class="img-content"> alt="Manga Panels" class="img-content">
+                        <img src="https://images.unsplash.com/photo-1607604276583-eef5d076aa5f?q=80&w=800&auto=format&fit=crop" alt="Manga Panels" class="img-content" />
                     </div>
                     <h3 class="service-title"><span class="accent-num">3.</span> Manga Panels</h3>
                     <p class="service-desc">Dynamic manga panels and comic layouts crafted for storytelling, rhythm, and high visual impact.</p>
@@ -230,11 +230,30 @@ const testimonials = await client.fetch(`*[_type == "testimonial"] | order(_crea
         </div>
     </section>
 
-    <section class="section" style="background:var(--bg-secondary);">
-        <div class="section-inner">
-            <div class="testimonials-grid">
-                {testimonials.map((review, index) => (
-                    <div class={`testimonial-card reveal reveal-d${(index % 4) + 1}`}>
+    <section class="section" style="background:var(--bg-secondary); overflow:hidden; padding: 100px 0;">
+        <div class="reviews-marquee-container">
+            <div class="reviews-marquee-track">
+                {testimonials.map((review) => (
+                    <div class="testimonial-card">
+                        <p class="testimonial-quote">{review.quote}</p>
+                        <div class="testimonial-author">
+                            <svg class="testimonial-avatar" viewBox="0 0 48 48" xmlns="http://www.w3.org/2000/svg">
+                                <circle cx="24" cy="24" r="24" fill="#334155"/>
+                                <circle cx="24" cy="18" r="9" fill="#94a3b8"/>
+                                <ellipse cx="24" cy="40" rx="16" ry="10" fill="#94a3b8"/>
+                            </svg>
+                            <div>
+                                <h4>{review.clientName}</h4>
+                                <span>{review.clientTitle || 'Client'}</span>
+                            </div>
+                        </div>
+                    </div>
+                ))}
+            </div>
+
+            <div class="reviews-marquee-track" aria-hidden="true">
+                {testimonials.map((review) => (
+                    <div class="testimonial-card">
                         <p class="testimonial-quote">{review.quote}</p>
                         <div class="testimonial-author">
                             <svg class="testimonial-avatar" viewBox="0 0 48 48" xmlns="http://www.w3.org/2000/svg">
