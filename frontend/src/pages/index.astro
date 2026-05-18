@@ -282,7 +282,7 @@ const testimonials = await client.fetch(`*[_type == "testimonial"] | order(_crea
                 </div>
                 
                 <div class="contact-form-wrapper reveal reveal-d2">
-                    <form action="https://api.web3forms.com/submit" method="POST" class="contact-form">
+                    <form action="https://api.web3forms.com/submit" method="POST" class="contact-form" id="contactForm">
                         <input type="hidden" name="access_key" value="1bc1a301-09ae-4641-ba23-6046069f32a1">
                         <input type="hidden" name="subject" value="New Project Inquiry - Studio A4">
                         
@@ -301,6 +301,12 @@ const testimonials = await client.fetch(`*[_type == "testimonial"] | order(_crea
                             <span class="arrow-icon">→</span>
                         </button>
                     </form>
+
+                    <div id="formSuccess" class="form-success" style="display: none;">
+                        <div class="success-icon">✓</div>
+                        <h3>Message Sent!</h3>
+                        <p>Thanks for reaching out. We will review your project and get back to you within 24 hours.</p>
+                    </div>
                 </div>
             </div>
         </div>
@@ -362,7 +368,7 @@ const testimonials = await client.fetch(`*[_type == "testimonial"] | order(_crea
             });
         }
 
-        // ULTRA-RESPONSIVE INTERSECTION OBSERVER FOR CHROME/ASTRO
+        // ULTRA-RESPONSIVE INTERSECTION OBSERVER
         const revealEls = document.querySelectorAll('.reveal');
         if (revealEls.length > 0) {
             const revealObserver = new IntersectionObserver((entries) => {
@@ -373,7 +379,7 @@ const testimonials = await client.fetch(`*[_type == "testimonial"] | order(_crea
                     }
                 });
             }, { 
-                threshold: 0.01, // Triggers instantly when 1% of section enters viewport
+                threshold: 0.01,
                 rootMargin: '0px 0px -40px 0px'
             });
 
@@ -409,6 +415,47 @@ const testimonials = await client.fetch(`*[_type == "testimonial"] | order(_crea
                 }
             });
         });
+
+        // CONTACT FORM BACKGROUND SUBMISSION
+        const contactForm = document.getElementById('contactForm');
+        const formSuccess = document.getElementById('formSuccess');
+
+        if (contactForm) {
+            contactForm.addEventListener('submit', function(e) {
+                e.preventDefault();
+
+                const submitBtn = contactForm.querySelector('button[type="submit"]');
+                const originalBtnText = submitBtn.innerHTML;
+                submitBtn.innerHTML = 'Sending...';
+                submitBtn.style.opacity = '0.7';
+                submitBtn.style.cursor = 'not-allowed';
+
+                const formData = new FormData(contactForm);
+
+                fetch('https://api.web3forms.com/submit', {
+                    method: 'POST',
+                    body: formData
+                })
+                .then(async (response) => {
+                    if (response.status == 200) {
+                        contactForm.style.display = 'none';
+                        formSuccess.style.display = 'block';
+                    } else {
+                        submitBtn.innerHTML = originalBtnText;
+                        submitBtn.style.opacity = '1';
+                        submitBtn.style.cursor = 'pointer';
+                        alert('Something went wrong. Please try again.');
+                    }
+                })
+                .catch(error => {
+                    console.error(error);
+                    submitBtn.innerHTML = originalBtnText;
+                    submitBtn.style.opacity = '1';
+                    submitBtn.style.cursor = 'pointer';
+                    alert('Something went wrong. Please check your connection.');
+                });
+            });
+        }
     </script>
 </body>
 </html>
