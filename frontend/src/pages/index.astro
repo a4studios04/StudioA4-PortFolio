@@ -5,8 +5,8 @@ import { client, urlFor } from '../utils/sanity.js';
 // Fetch Projects
 const projects = await client.fetch(`*[_type == "project"] | order(projectNumber asc)`);
 
-// Fetch Testimonials
-const testimonials = await client.fetch(`*[_type == "testimonial"]`);
+// Fetch Testimonials sorted by the time they were created
+const testimonials = await client.fetch(`*[_type == "testimonial"] | order(_createdAt desc)`);
 ---
 
 <!DOCTYPE html>
