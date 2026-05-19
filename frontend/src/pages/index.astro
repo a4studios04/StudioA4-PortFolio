@@ -100,8 +100,8 @@ const testimonials = await client.fetch(`*[_type == "testimonial"] | order(_crea
             <span class="section-label reveal">Selected Projects</span>
             <h2 class="section-title reveal reveal-d1">Recent work we're<br>proud of.</h2>
             <div class="work-grid">
-                {projects.map((project, index) => (
-                    <div class={`work-item reveal reveal-d${(index % 4) + 1}`}>
+                {projects.map((project: any, index: number) => (
+                    <a href={`/project/${project.slug?.current}`} class={`work-item reveal reveal-d${(index % 4) + 1}`} style="display: block; text-decoration: none;">
                         <div class="work-item-inner">
                             {project.mainImage && (
                                 <img 
@@ -118,7 +118,7 @@ const testimonials = await client.fetch(`*[_type == "testimonial"] | order(_crea
                             </div>
                             <span class="work-item-number">{project.projectNumber}</span>
                         </div>
-                    </div>
+                    </a>
                 ))}
             </div>
         </div>
@@ -233,7 +233,7 @@ const testimonials = await client.fetch(`*[_type == "testimonial"] | order(_crea
     <section class="section" style="background:var(--bg-secondary); overflow:hidden; padding: 100px 0;">
         <div class="reviews-marquee-container">
             <div class="reviews-marquee-track">
-                {testimonials.map((review) => (
+                {testimonials.map((review: any) => (
                     <div class="testimonial-card">
                         <p class="testimonial-quote">{review.quote}</p>
                         <div class="testimonial-author">
@@ -252,7 +252,7 @@ const testimonials = await client.fetch(`*[_type == "testimonial"] | order(_crea
             </div>
 
             <div class="reviews-marquee-track" aria-hidden="true">
-                {testimonials.map((review) => (
+                {testimonials.map((review: any) => (
                     <div class="testimonial-card">
                         <p class="testimonial-quote">{review.quote}</p>
                         <div class="testimonial-author">
@@ -285,6 +285,7 @@ const testimonials = await client.fetch(`*[_type == "testimonial"] | order(_crea
                     <form action="https://api.web3forms.com/submit" method="POST" class="contact-form" id="contactForm">
                         <input type="hidden" name="access_key" value="1bc1a301-09ae-4641-ba23-6046069f32a1">
                         <input type="hidden" name="subject" value="New Project Inquiry - Studio A4">
+                        <input type="checkbox" name="botcheck" class="hidden" style="display: none;">
                         
                         <div class="form-group">
                             <input type="text" name="name" placeholder="Your Name" required class="form-input">
@@ -352,17 +353,17 @@ const testimonials = await client.fetch(`*[_type == "testimonial"] | order(_crea
 
         if (hamburger && mobileMenu) {
             hamburger.addEventListener('click', () => {
-                hamburger.classList.toggle('active');
-                mobileMenu.classList.toggle('active');
-                document.body.style.overflow = mobileMenu.classList.contains('active') ? 'hidden' : '';
+                hamburger?.classList.toggle('active');
+                mobileMenu?.classList.toggle('active');
+                document.body.style.overflow = mobileMenu?.classList.contains('active') ? 'hidden' : '';
             });
         }
 
         if (mobileLinks) {
-            mobileLinks.forEach(link => {
+            mobileLinks.forEach((link: any) => {
                 link.addEventListener('click', () => {
-                    hamburger.classList.remove('active');
-                    mobileMenu.classList.remove('active');
+                    hamburger?.classList.remove('active');
+                    mobileMenu?.classList.remove('active');
                     document.body.style.overflow = '';
                 });
             });
@@ -371,8 +372,8 @@ const testimonials = await client.fetch(`*[_type == "testimonial"] | order(_crea
         // ULTRA-RESPONSIVE INTERSECTION OBSERVER
         const revealEls = document.querySelectorAll('.reveal');
         if (revealEls.length > 0) {
-            const revealObserver = new IntersectionObserver((entries) => {
-                entries.forEach(entry => {
+            const revealObserver = new IntersectionObserver((entries: any[]) => {
+                entries.forEach((entry: any) => {
                     if (entry.isIntersecting) {
                         entry.target.classList.add('visible');
                         revealObserver.unobserve(entry.target);
@@ -383,13 +384,13 @@ const testimonials = await client.fetch(`*[_type == "testimonial"] | order(_crea
                 rootMargin: '0px 0px -40px 0px'
             });
 
-            revealEls.forEach(el => revealObserver.observe(el));
+            revealEls.forEach((el: any) => revealObserver.observe(el));
         }
 
         // PARALLAX ORB ON MOUSE MOVE
-        const orb1 = document.querySelector('.orb-1');
-        const orb2 = document.querySelector('.orb-2');
-        document.addEventListener('mousemove', (e) => {
+        const orb1 = document.querySelector('.orb-1') as HTMLElement | null;
+        const orb2 = document.querySelector('.orb-2') as HTMLElement | null;
+        document.addEventListener('mousemove', (e: MouseEvent) => {
             const x = (e.clientX - window.innerWidth / 2) / 60;
             const y = (e.clientY - window.innerHeight / 2) / 60;
             if (orb1) orb1.style.transform = `translate(${x * 18}px, ${y * 18}px)`;
@@ -401,13 +402,13 @@ const testimonials = await client.fetch(`*[_type == "testimonial"] | order(_crea
         const navLinksAll = document.querySelectorAll('.nav-links a');
         window.addEventListener('scroll', () => {
             let current = '';
-            sections.forEach(section => {
+            sections.forEach((section: any) => {
                 const sectionTop = section.offsetTop - 120;
                 if (window.scrollY >= sectionTop) {
                     current = section.getAttribute('id');
                 }
             });
-            navLinksAll.forEach(link => {
+            navLinksAll.forEach((link: any) => {
                 if(link.getAttribute('href') === '#' + current) {
                     link.style.color = '#ff4d4d';
                 } else {
@@ -417,14 +418,16 @@ const testimonials = await client.fetch(`*[_type == "testimonial"] | order(_crea
         });
 
         // CONTACT FORM BACKGROUND SUBMISSION
-        const contactForm = document.getElementById('contactForm');
-        const formSuccess = document.getElementById('formSuccess');
+        const contactForm = document.getElementById('contactForm') as HTMLFormElement | null;
+        const formSuccess = document.getElementById('formSuccess') as HTMLElement | null;
 
-        if (contactForm) {
-            contactForm.addEventListener('submit', function(e) {
+        if (contactForm && formSuccess) {
+            contactForm.addEventListener('submit', function(e: Event) {
                 e.preventDefault();
 
-                const submitBtn = contactForm.querySelector('button[type="submit"]');
+                const submitBtn = contactForm.querySelector('button[type="submit"]') as HTMLButtonElement | null;
+                if (!submitBtn) return;
+
                 const originalBtnText = submitBtn.innerHTML;
                 submitBtn.innerHTML = 'Sending...';
                 submitBtn.style.opacity = '0.7';
@@ -447,7 +450,7 @@ const testimonials = await client.fetch(`*[_type == "testimonial"] | order(_crea
                         alert('Something went wrong. Please try again.');
                     }
                 })
-                .catch(error => {
+                .catch((error: any) => {
                     console.error(error);
                     submitBtn.innerHTML = originalBtnText;
                     submitBtn.style.opacity = '1';
