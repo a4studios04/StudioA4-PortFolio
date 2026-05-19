@@ -2,8 +2,12 @@
 import '../../styles/global.css';
 import { client, urlFor } from '../../utils/sanity.js';
 
+// 1. We update the GROQ query to specifically fetch the raw URL of your MP4 file
 export async function getStaticPaths() {
-    const projects = await client.fetch(`*[_type == "project" && defined(slug.current)]`);
+    const projects = await client.fetch(`*[_type == "project" && defined(slug.current)]{
+        ...,
+        "shortVideoUrl": shortVideo.asset->url
+    }`);
 
     return projects.map((project: any) => {
         return {
@@ -14,6 +18,15 @@ export async function getStaticPaths() {
 }
 
 const { project } = Astro.props as any; 
+
+// 2. A smart function to extract the raw ID from any YouTube link you paste
+function getYouTubeId(url: string) {
+    if(!url) return null;
+    const regExp = /^.*(youtu.be\/|v\/|u\/\w\/|embed\/|watch\?v=|\&v=)([^#\&\?]*).*/;
+    const match = url.match(regExp);
+    return (match && match[2].length === 11) ? match[2] : null;
+}
+const ytId = getYouTubeId(project.videoUrl);
 ---
 
 <!DOCTYPE html>
@@ -37,13 +50,13 @@ const { project } = Astro.props as any;
             padding: 80px 60px;
             background: var(--bg-primary);
         }
-        .project-hero-img {
+        .project-hero-media {
             position: absolute;
             inset: 0;
             width: 100%;
             height: 100%;
             object-fit: cover;
-            object-position: center 15%; /* Better framing for character art */
+            object-position: top center; /* Perfect framing for character art */
             z-index: 0;
         }
         /* CINEMATIC FADE OVERLAY */
@@ -53,10 +66,10 @@ const { project } = Astro.props as any;
             inset: 0;
             background: linear-gradient(
                 to bottom, 
-                rgba(13,13,13,0.8) 0%, /* Dark at top for logo */
-                rgba(13,13,13,0.1) 20%, /* Clear in middle */
+                rgba(13,13,13,0.8) 0%, 
+                rgba(13,13,13,0.1) 20%, 
                 rgba(13,13,13,0.3) 60%, 
-                #0d0d0d 100% /* Solid dark at bottom to blend into page */
+                #0d0d0d 100% 
             );
             z-index: 1;
         }
@@ -114,6 +127,23 @@ const { project } = Astro.props as any;
             color: var(--text-secondary);
             white-space: pre-wrap; 
         }
+
+        /* SMART VIDEO EMBED STYLES */
+        .cinematic-embed-wrapper {
+            margin-top: 40px;
+            width: 100%;
+            aspect-ratio: 16 / 9;
+            border-radius: var(--radius-lg);
+            overflow: hidden;
+            border: 1px solid var(--border-subtle);
+            background: #000;
+        }
+        .cinematic-embed-wrapper iframe {
+            width: 100%;
+            height: 100%;
+            pointer-events: none; /* Prevents users from clicking to pause/open YouTube */
+        }
+
         .project-gallery {
             padding: 0 60px 120px;
             max-width: 1400px;
@@ -143,9 +173,16 @@ const { project } = Astro.props as any;
     </nav>
 
     <header class="project-hero">
-        {project.mainImage && (
-            <img src={urlFor(project.mainImage).width(1920).url()} alt={project.title} class="project-hero-img" />
-        )}
+        {project.shortVideoUrl ? (
+            <video 
+                src={project.shortVideoUrl} 
+                class="project-hero-media" 
+                autoplay muted loop playsinline 
+            ></video>
+        ) : project.mainImage ? (
+            <img src={urlFor(project.mainImage).width(1920).url()} alt={project.title} class="project-hero-media" />
+        ) : null}
+
         <div class="project-hero-content reveal">
             <a href="/#work" class="back-btn">← Back to Portfolio</a>
             <h1 class="hero-headline" style="margin-bottom: 10px;">{project.title}</h1>
@@ -164,6 +201,17 @@ const { project } = Astro.props as any;
             <div class="project-description">
                 {project.description || "In-depth case study and process details coming soon."}
             </div>
+            
+            {ytId && (
+                <div class="cinematic-embed-wrapper reveal reveal-d3">
+                    <iframe 
+                        src={`https://www.youtube.com/embed/${ytId}?autoplay=1&mute=1&loop=1&playlist=${ytId}&controls=0&modestbranding=1&rel=0&disablekb=1`} 
+                        frameborder="0" 
+                        allow="autoplay; fullscreen" 
+                        allowfullscreen
+                    ></iframe>
+                </div>
+            )}
         </div>
     </section>
 
