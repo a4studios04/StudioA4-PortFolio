@@ -2,20 +2,18 @@
 import '../../styles/global.css';
 import { client, urlFor } from '../../utils/sanity.js';
 
-// 1. Tell Astro to generate a page for every single project slug in Sanity
 export async function getStaticPaths() {
     const projects = await client.fetch(`*[_type == "project" && defined(slug.current)]`);
 
     return projects.map((project: any) => {
         return {
             params: { slug: project.slug.current },
-            props: { project }, // Pass the project data into the page
+            props: { project }, 
         };
     });
 }
 
-// 2. Grab the specific project data for the page currently being built
-const { project } = Astro.props as any; // FIX: Added "as any" to solve the TS 'never' errors!
+const { project } = Astro.props as any; 
 ---
 
 <!DOCTYPE html>
@@ -37,6 +35,7 @@ const { project } = Astro.props as any; // FIX: Added "as any" to solve the TS '
             display: flex;
             align-items: flex-end;
             padding: 80px 60px;
+            background: var(--bg-primary);
         }
         .project-hero-img {
             position: absolute;
@@ -44,13 +43,28 @@ const { project } = Astro.props as any; // FIX: Added "as any" to solve the TS '
             width: 100%;
             height: 100%;
             object-fit: cover;
+            object-position: center 15%; /* Better framing for character art */
             z-index: 0;
-            filter: brightness(0.6);
+        }
+        /* CINEMATIC FADE OVERLAY */
+        .project-hero::after {
+            content: '';
+            position: absolute;
+            inset: 0;
+            background: linear-gradient(
+                to bottom, 
+                rgba(13,13,13,0.8) 0%, /* Dark at top for logo */
+                rgba(13,13,13,0.1) 20%, /* Clear in middle */
+                rgba(13,13,13,0.3) 60%, 
+                #0d0d0d 100% /* Solid dark at bottom to blend into page */
+            );
+            z-index: 1;
         }
         .project-hero-content {
             position: relative;
             z-index: 2;
             max-width: 900px;
+            width: 100%;
         }
         .back-btn {
             display: inline-flex;
@@ -98,7 +112,7 @@ const { project } = Astro.props as any; // FIX: Added "as any" to solve the TS '
             font-size: 1.15rem;
             line-height: 1.8;
             color: var(--text-secondary);
-            white-space: pre-wrap; /* Keeps paragraphs spaced correctly */
+            white-space: pre-wrap; 
         }
         .project-gallery {
             padding: 0 60px 120px;
@@ -124,7 +138,7 @@ const { project } = Astro.props as any; // FIX: Added "as any" to solve the TS '
 </head>
 <body>
 
-    <nav class="nav" style="background: linear-gradient(rgba(13,13,13,0.9), transparent); border: none;">
+    <nav class="nav" style="background: transparent; border: none; backdrop-filter: none; -webkit-backdrop-filter: none;">
         <a href="/" class="nav-logo">A<span>4</span></a>
     </nav>
 
