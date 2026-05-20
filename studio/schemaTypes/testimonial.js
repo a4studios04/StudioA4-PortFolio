@@ -6,20 +6,28 @@ export default {
     {
       name: 'quote',
       title: 'Review Quote',
-      type: 'text', // 'text' gives you a bigger box than 'string' for long reviews
-      description: 'The actual review from the client (do not include the quote marks "")'
+      type: 'text',
+      description: 'The actual review from the client.',
     },
     {
       name: 'clientName',
       title: 'Client Name',
       type: 'string',
-      description: 'e.g., VStrife'
+      description: 'e.g., VStrife',
     },
     {
       name: 'clientTitle',
       title: 'Client Role',
       type: 'string',
-      description: 'e.g., Art Director, Indie Dev, or just leave blank'
-    }
+      description: 'e.g., Art Director, Indie Dev, or leave blank',
+    },
+    // NEW FIELD: This creates a dropdown to select the actual project!
+    {
+      name: 'projectRef',
+      title: 'Associated Project',
+      type: 'reference',
+      to: [{ type: 'project' }],
+      description: 'Select the project this review is for to display a "Preview Work" link.',
+    },
   ],
 }

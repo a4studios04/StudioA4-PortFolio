@@ -5,8 +5,15 @@ import { client, urlFor } from '../utils/sanity.js';
 // Fetch Projects
 const projects = await client.fetch(`*[_type == "project"] | order(projectNumber asc)`);
 
-// Fetch Testimonials sorted by the time they were created
-const testimonials = await client.fetch(`*[_type == "testimonial"] | order(_createdAt desc)`);
+// Fetch Testimonials AND expand the project reference to get the URL slug
+const testimonials = await client.fetch(`
+    *[_type == "testimonial"] | order(_createdAt desc) {
+        ...,
+        projectRef->{
+            slug
+        }
+    }
+`);
 ---
 
 <!DOCTYPE html>
@@ -17,6 +24,24 @@ const testimonials = await client.fetch(`*[_type == "testimonial"] | order(_crea
     <title>Studio A4 — Creative Design Studio</title>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link href="https://fonts.googleapis.com/css2?family=DM+Sans:opsz,wght@9..40,300;9..40,400;9..40,500;9..40,600;9..40,700;9..40,800&family=Syne:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    
+    <style>
+        /* Sleek style for the new Preview Work button */
+        .preview-work-btn {
+            font-size: 0.85rem;
+            color: rgba(255,255,255,0.3);
+            text-decoration: none;
+            transition: all 0.3s ease;
+            font-family: 'DM Sans', sans-serif;
+            font-weight: 600;
+            padding-bottom: 2px;
+            border-bottom: 1px solid transparent;
+        }
+        .preview-work-btn:hover {
+            color: #ff4d4d;
+            border-bottom-color: #ff4d4d;
+        }
+    </style>
 </head>
 <body>
 
@@ -126,7 +151,6 @@ const testimonials = await client.fetch(`*[_type == "testimonial"] | order(_crea
                 Designing worlds<br>that feel alive.
             </h2>
             
-            {/* SWITCHED TO FLEXBOX FOR PERFECT SYMMETRICAL CENTERING */}
             <div class="services-grid" style="display: flex; flex-wrap: wrap; justify-content: center; gap: 60px 40px;">
                 
                 <div class="service-text-card reveal reveal-d1" style="flex: 1 1 300px; max-width: 360px;">
@@ -204,22 +228,43 @@ const testimonials = await client.fetch(`*[_type == "testimonial"] | order(_crea
         <div class="reviews-marquee-container">
             <div class="reviews-marquee-track">
                 {testimonials.map((review: any) => (
-                    <div class="testimonial-card">
+                    <div class="testimonial-card" style="display: flex; flex-direction: column;">
                         <p class="testimonial-quote">{review.quote}</p>
-                        <div class="testimonial-author">
-                            <svg class="testimonial-avatar" viewBox="0 0 48 48" xmlns="http://www.w3.org/2000/svg"><circle cx="24" cy="24" r="24" fill="#334155"/><circle cx="24" cy="18" r="9" fill="#94a3b8"/><ellipse cx="24" cy="40" rx="16" ry="10" fill="#94a3b8"/></svg>
-                            <div><h4>{review.clientName}</h4><span>{review.clientTitle || 'Client'}</span></div>
+                        
+                        {/* New Flexbox Layout for the Avatar + Project Link */}
+                        <div style="display: flex; justify-content: space-between; align-items: flex-end; margin-top: auto; padding-top: 20px;">
+                            <div class="testimonial-author" style="margin: 0;">
+                                <svg class="testimonial-avatar" viewBox="0 0 48 48" xmlns="http://www.w3.org/2000/svg"><circle cx="24" cy="24" r="24" fill="#334155"/><circle cx="24" cy="18" r="9" fill="#94a3b8"/><ellipse cx="24" cy="40" rx="16" ry="10" fill="#94a3b8"/></svg>
+                                <div><h4>{review.clientName}</h4><span>{review.clientTitle || 'Client'}</span></div>
+                            </div>
+                            
+                            {/* Conditional Preview Link */}
+                            {review.projectRef?.slug?.current && (
+                                <a href={`/project/${review.projectRef.slug.current}`} class="preview-work-btn">
+                                    Preview Work ↗
+                                </a>
+                            )}
                         </div>
                     </div>
                 ))}
             </div>
+            
             <div class="reviews-marquee-track" aria-hidden="true">
                 {testimonials.map((review: any) => (
-                    <div class="testimonial-card">
+                    <div class="testimonial-card" style="display: flex; flex-direction: column;">
                         <p class="testimonial-quote">{review.quote}</p>
-                        <div class="testimonial-author">
-                            <svg class="testimonial-avatar" viewBox="0 0 48 48" xmlns="http://www.w3.org/2000/svg"><circle cx="24" cy="24" r="24" fill="#334155"/><circle cx="24" cy="18" r="9" fill="#94a3b8"/><ellipse cx="24" cy="40" rx="16" ry="10" fill="#94a3b8"/></svg>
-                            <div><h4>{review.clientName}</h4><span>{review.clientTitle || 'Client'}</span></div>
+                        
+                        <div style="display: flex; justify-content: space-between; align-items: flex-end; margin-top: auto; padding-top: 20px;">
+                            <div class="testimonial-author" style="margin: 0;">
+                                <svg class="testimonial-avatar" viewBox="0 0 48 48" xmlns="http://www.w3.org/2000/svg"><circle cx="24" cy="24" r="24" fill="#334155"/><circle cx="24" cy="18" r="9" fill="#94a3b8"/><ellipse cx="24" cy="40" rx="16" ry="10" fill="#94a3b8"/></svg>
+                                <div><h4>{review.clientName}</h4><span>{review.clientTitle || 'Client'}</span></div>
+                            </div>
+                            
+                            {review.projectRef?.slug?.current && (
+                                <a href={`/project/${review.projectRef.slug.current}`} class="preview-work-btn">
+                                    Preview Work ↗
+                                </a>
+                            )}
                         </div>
                     </div>
                 ))}
