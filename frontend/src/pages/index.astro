@@ -72,26 +72,16 @@ const testimonials = await client.fetch(`*[_type == "testimonial"] | order(_crea
 
     <div class="marquee-section">
         <div class="marquee-track">
-            <span class="filled">Illustration</span>
-            <span>✦</span>
-            <span>Concept Art</span>
-            <span>✦</span>
-            <span class="filled">Character Design</span>
-            <span>✦</span>
-            <span>Background Art</span>
-            <span>✦</span>
-            <span class="filled">Visual Dev</span>
-            <span>✦</span>
-            <span class="filled">Illustration</span>
-            <span>✦</span>
-            <span>Concept Art</span>
-            <span>✦</span>
-            <span class="filled">Character Design</span>
-            <span>✦</span>
-            <span>Background Art</span>
-            <span>✦</span>
-            <span class="filled">Visual Dev</span>
-            <span>✦</span>
+            <span class="filled">Illustration</span><span>✦</span>
+            <span>Concept Art</span><span>✦</span>
+            <span class="filled">Character Design</span><span>✦</span>
+            <span>Background Art</span><span>✦</span>
+            <span class="filled">Manga</span><span>✦</span>
+            <span class="filled">Illustration</span><span>✦</span>
+            <span>Concept Art</span><span>✦</span>
+            <span class="filled">Character Design</span><span>✦</span>
+            <span>Background Art</span><span>✦</span>
+            <span class="filled">Manga</span><span>✦</span>
         </div>
     </div>
 
@@ -103,13 +93,16 @@ const testimonials = await client.fetch(`*[_type == "testimonial"] | order(_crea
                 {projects.map((project: any, index: number) => (
                     <a href={`/project/${project.slug?.current}`} class={`work-item reveal reveal-d${(index % 4) + 1}`} style="display: block; text-decoration: none;">
                         <div class="work-item-inner">
-                            {project.mainImage && (
+                            {/* Apple Standard: Rely purely on optimized static images for grid performance */}
+                            {project.mainImage ? (
                                 <img 
                                     src={urlFor(project.mainImage).width(800).url()} 
                                     alt={project.title} 
                                     class="work-item-bg"
                                     loading="lazy"
                                 />
+                            ) : (
+                                <div class="work-item-bg" style="background: #111;"></div>
                             )}
                             <div class="work-item-overlay">
                                 <span class="work-item-tag">{project.tag}</span>
@@ -129,73 +122,40 @@ const testimonials = await client.fetch(`*[_type == "testimonial"] | order(_crea
             <span class="section-label reveal">Expertise</span>
             <h2 class="section-title reveal reveal-d1">Designing worlds<br>that feel alive.</h2>
             
-            <div class="services-grid">
+            <div class="services-grid" style="grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));">
                 <div class="service-card reveal reveal-d1">
-                    <div class="service-image">
-                        <div class="service-badge">3D</div>
-                        <img src="https://images.unsplash.com/photo-1605810230434-7631ac76ec81?q=80&w=800&auto=format&fit=crop" alt="3D Art & Visuals" class="img-content">
-                    </div>
+                    <div class="service-image"><div class="service-badge">3D</div><img src="https://images.unsplash.com/photo-1605810230434-7631ac76ec81?q=80&w=800&auto=format&fit=crop" alt="3D Art & Visuals" class="img-content"></div>
                     <h3 class="service-title"><span class="accent-num">1.</span> 3D Art & Visuals</h3>
                     <p class="service-desc">High-quality 3D renders, key visuals, and cinematic compositions for games, brands, music, and digital experiences.</p>
                     <div class="service-tags">MODELING &bull; TEXTURING &bull; LIGHTING &bull; RENDERING</div>
                 </div>
 
                 <div class="service-card reveal reveal-d2">
-                    <div class="service-image">
-                        <div class="service-badge">2D</div>
-                        <img src="https://images.unsplash.com/photo-1578632767115-351597cf2477?q=80&w=800&auto=format&fit=crop" alt="2D Art & Illustration" class="img-content">
-                    </div>
+                    <div class="service-image"><div class="service-badge">2D</div><img src="https://images.unsplash.com/photo-1578632767115-351597cf2477?q=80&w=800&auto=format&fit=crop" alt="2D Art & Illustration" class="img-content"></div>
                     <h3 class="service-title"><span class="accent-num">2.</span> 2D Art & Illustration</h3>
                     <p class="service-desc">Stylized illustrations and key art with strong composition, color, and mood to tell powerful stories and build striking visuals.</p>
                     <div class="service-tags">CONCEPT ART &bull; ILLUSTRATION &bull; KEY VISUALS</div>
                 </div>
 
                 <div class="service-card reveal reveal-d3">
-                    <div class="service-image">
-                        <div class="service-badge">
-                            <svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="18" height="18" rx="2" ry="2"></rect><line x1="12" y1="3" x2="12" y2="21"></line></svg>
-                        </div>
-                        <img src="https://images.unsplash.com/photo-1607604276583-eef5d076aa5f?q=80&w=800&auto=format&fit=crop" alt="Manga Panels" class="img-content" />
-                    </div>
+                    <div class="service-image"><div class="service-badge"><svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="18" height="18" rx="2" ry="2"></rect><line x1="12" y1="3" x2="12" y2="21"></line></svg></div><img src="https://images.unsplash.com/photo-1607604276583-eef5d076aa5f?q=80&w=800&auto=format&fit=crop" alt="Manga Panels" class="img-content" /></div>
                     <h3 class="service-title"><span class="accent-num">3.</span> Manga Panels</h3>
                     <p class="service-desc">Dynamic manga panels and comic layouts crafted for storytelling, rhythm, and high visual impact.</p>
                     <div class="service-tags">PANELING &bull; INKING &bull; TONES &bull; COMPOSITION</div>
                 </div>
 
                 <div class="service-card reveal reveal-d4">
-                    <div class="service-image">
-                        <div class="service-badge">
-                            <svg viewBox="0 0 24 24" fill="none" stroke-width="2"><path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"></path><polyline points="3.27 6.96 12 12.01 20.73 6.96"></polyline><line x1="12" y1="22.08" x2="12" y2="12"></line></svg>
-                        </div>
-                        <img src="https://images.unsplash.com/photo-1618336753974-aae8e04506aa?q=80&w=800&auto=format&fit=crop" alt="Environment Design" class="img-content">
-                    </div>
+                    <div class="service-image"><div class="service-badge"><svg viewBox="0 0 24 24" fill="none" stroke-width="2"><path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"></path><polyline points="3.27 6.96 12 12.01 20.73 6.96"></polyline><line x1="12" y1="22.08" x2="12" y2="12"></line></svg></div><img src="https://images.unsplash.com/photo-1618336753974-aae8e04506aa?q=80&w=800&auto=format&fit=crop" alt="Environment Design" class="img-content"></div>
                     <h3 class="service-title"><span class="accent-num">4.</span> Environment Design</h3>
                     <p class="service-desc">Immersive environments and worldbuilding designs for games, animation, and cinematic projects.</p>
                     <div class="service-tags">WORLD BUILDING &bull; 3D ENVIRONMENTS &bull; MATTE PAINTING</div>
                 </div>
 
                 <div class="service-card reveal reveal-d5">
-                    <div class="service-image">
-                        <div class="service-badge">
-                            <svg viewBox="0 0 24 24" fill="none" stroke-width="2"><polygon points="5 3 19 12 5 21 5 3"></polygon></svg>
-                        </div>
-                        <img src="https://images.unsplash.com/photo-1550684848-fac1c5b4e853?q=80&w=800&auto=format&fit=crop" alt="Motion Design & Animation" class="img-content">
-                    </div>
+                    <div class="service-image"><div class="service-badge"><svg viewBox="0 0 24 24" fill="none" stroke-width="2"><polygon points="5 3 19 12 5 21 5 3"></polygon></svg></div><img src="https://images.unsplash.com/photo-1550684848-fac1c5b4e853?q=80&w=800&auto=format&fit=crop" alt="Motion Design & Animation" class="img-content"></div>
                     <h3 class="service-title"><span class="accent-num">5.</span> Motion Design & Animation</h3>
                     <p class="service-desc">Cinematic animations, motion graphics, and visual effects that bring ideas to life with rhythm and impact.</p>
                     <div class="service-tags">ANIMATION &bull; VFX &bull; MOTION GRAPHICS &bull; COMPOSITING</div>
-                </div>
-
-                <div class="service-card reveal reveal-d6">
-                    <div class="service-image">
-                        <div class="service-badge">
-                            <svg viewBox="0 0 24 24" fill="none" stroke-width="2"><rect x="3" y="3" width="18" height="18" rx="2" ry="2"></rect><line x1="3" y1="9" x2="21" y2="9"></line><line x1="9" y1="21" x2="9" y2="9"></line></svg>
-                        </div>
-                        <img src="https://images.unsplash.com/photo-1618761714954-0b8cd0026356?q=80&w=800&auto=format&fit=crop" alt="UI/UX & Visual Design" class="img-content">
-                    </div>
-                    <h3 class="service-title"><span class="accent-num">6.</span> UI/UX & Visual Design</h3>
-                    <p class="service-desc">Clean, modern, and immersive UI/UX design that blends aesthetics with functionality for web and digital products.</p>
-                    <div class="service-tags">UI DESIGN &bull; UX FLOW &bull; PROTOTYPES &bull; SYSTEMS</div>
                 </div>
             </div>
         </div>
@@ -205,26 +165,14 @@ const testimonials = await client.fetch(`*[_type == "testimonial"] | order(_crea
         <div class="section-inner">
             <div class="about-grid">
                 <div class="about-visual reveal">
-                    <div class="about-img-wrap">
-                        <img 
-                            src="/assets/about-pic.jpg" 
-                            alt="Studio A4 Creative Duo" 
-                            class="about-portrait"
-                        />
-                    </div>
+                    <div class="about-img-wrap"><img src="/assets/about-pic.jpg" alt="Studio A4 Creative Duo" class="about-portrait"/></div>
                     <div class="about-accent-box"></div>
                 </div>
                 <div class="about-text">
                     <span class="section-label reveal">About</span>
                     <h2 class="reveal reveal-d1">Designing worlds<br>that feel alive.</h2>
-                    <p class="reveal reveal-d2">
-                        StudioA4 is a creative driven by a passion for stylized 2D/3D aesthetics, character design, and compelling visual development.
-                    </p>
-                    <p class="reveal reveal-d3">
-                        Whether it is an anime-inspired key illustration or full conceptual worldbuilding, our approach is focused on pushing boundaries. No corporate fluff — just exceptional, stylized work.
-                    </p>
-                    <div class="about-stats reveal reveal-d4">
-                    </div>
+                    <p class="reveal reveal-d2">StudioA4 is a creative driven by a passion for stylized 2D/3D aesthetics, character design, and compelling visual development.</p>
+                    <p class="reveal reveal-d3">Whether it is an anime-inspired key illustration or full conceptual worldbuilding, our approach is focused on pushing boundaries. No corporate fluff — just exceptional, stylized work.</p>
                 </div>
             </div>
         </div>
@@ -237,34 +185,19 @@ const testimonials = await client.fetch(`*[_type == "testimonial"] | order(_crea
                     <div class="testimonial-card">
                         <p class="testimonial-quote">{review.quote}</p>
                         <div class="testimonial-author">
-                            <svg class="testimonial-avatar" viewBox="0 0 48 48" xmlns="http://www.w3.org/2000/svg">
-                                <circle cx="24" cy="24" r="24" fill="#334155"/>
-                                <circle cx="24" cy="18" r="9" fill="#94a3b8"/>
-                                <ellipse cx="24" cy="40" rx="16" ry="10" fill="#94a3b8"/>
-                            </svg>
-                            <div>
-                                <h4>{review.clientName}</h4>
-                                <span>{review.clientTitle || 'Client'}</span>
-                            </div>
+                            <svg class="testimonial-avatar" viewBox="0 0 48 48" xmlns="http://www.w3.org/2000/svg"><circle cx="24" cy="24" r="24" fill="#334155"/><circle cx="24" cy="18" r="9" fill="#94a3b8"/><ellipse cx="24" cy="40" rx="16" ry="10" fill="#94a3b8"/></svg>
+                            <div><h4>{review.clientName}</h4><span>{review.clientTitle || 'Client'}</span></div>
                         </div>
                     </div>
                 ))}
             </div>
-
             <div class="reviews-marquee-track" aria-hidden="true">
                 {testimonials.map((review: any) => (
                     <div class="testimonial-card">
                         <p class="testimonial-quote">{review.quote}</p>
                         <div class="testimonial-author">
-                            <svg class="testimonial-avatar" viewBox="0 0 48 48" xmlns="http://www.w3.org/2000/svg">
-                                <circle cx="24" cy="24" r="24" fill="#334155"/>
-                                <circle cx="24" cy="18" r="9" fill="#94a3b8"/>
-                                <ellipse cx="24" cy="40" rx="16" ry="10" fill="#94a3b8"/>
-                            </svg>
-                            <div>
-                                <h4>{review.clientName}</h4>
-                                <span>{review.clientTitle || 'Client'}</span>
-                            </div>
+                            <svg class="testimonial-avatar" viewBox="0 0 48 48" xmlns="http://www.w3.org/2000/svg"><circle cx="24" cy="24" r="24" fill="#334155"/><circle cx="24" cy="18" r="9" fill="#94a3b8"/><ellipse cx="24" cy="40" rx="16" ry="10" fill="#94a3b8"/></svg>
+                            <div><h4>{review.clientName}</h4><span>{review.clientTitle || 'Client'}</span></div>
                         </div>
                     </div>
                 ))}
@@ -287,20 +220,11 @@ const testimonials = await client.fetch(`*[_type == "testimonial"] | order(_crea
                         <input type="hidden" name="subject" value="New Project Inquiry - Studio A4">
                         <input type="checkbox" name="botcheck" class="hidden" style="display: none;">
                         
-                        <div class="form-group">
-                            <input type="text" name="name" placeholder="Your Name" required class="form-input">
-                        </div>
-                        <div class="form-group">
-                            <input type="email" name="email" placeholder="Your Email Address" required class="form-input">
-                        </div>
-                        <div class="form-group">
-                            <textarea name="message" placeholder="Tell us about your project..." required class="form-input form-textarea"></textarea>
-                        </div>
+                        <div class="form-group"><input type="text" name="name" placeholder="Your Name" required class="form-input"></div>
+                        <div class="form-group"><input type="email" name="email" placeholder="Your Email Address" required class="form-input"></div>
+                        <div class="form-group"><textarea name="message" placeholder="Tell us about your project..." required class="form-input form-textarea"></textarea></div>
                         
-                        <button type="submit" class="btn btn-primary" style="width: 100%; justify-content: center;">
-                            Send Message
-                            <span class="arrow-icon">→</span>
-                        </button>
+                        <button type="submit" class="btn btn-primary" style="width: 100%; justify-content: center;">Send Message<span class="arrow-icon">→</span></button>
                     </form>
 
                     <div id="formSuccess" class="form-success" style="display: none;">
@@ -321,11 +245,7 @@ const testimonials = await client.fetch(`*[_type == "testimonial"] | order(_crea
             </div>
             <div class="footer-links">
                 <h4>Navigation</h4>
-                <a href="#home">Home</a>
-                <a href="#work">Work</a>
-                <a href="#services">Expertise</a>
-                <a href="#about">About</a>
-                <a href="#contact">Contact</a>
+                <a href="#home">Home</a><a href="#work">Work</a><a href="#services">Expertise</a><a href="#about">About</a><a href="#contact">Contact</a>
             </div>
             <div class="footer-links">
                 <h4>Socials</h4>
@@ -340,9 +260,7 @@ const testimonials = await client.fetch(`*[_type == "testimonial"] | order(_crea
                 <a href="https://pin.it/1EkhjFukQ" target="_blank" rel="noopener noreferrer">Pinterest</a>
             </div>
         </div>
-        <div class="footer-bottom">
-            <span>© 2026 Studio A4. All rights reserved.</span>
-        </div>
+        <div class="footer-bottom"><span>© 2026 Studio A4. All rights reserved.</span></div>
     </footer>
 
     <script>
@@ -379,11 +297,7 @@ const testimonials = await client.fetch(`*[_type == "testimonial"] | order(_crea
                         revealObserver.unobserve(entry.target);
                     }
                 });
-            }, { 
-                threshold: 0.01,
-                rootMargin: '0px 0px -40px 0px'
-            });
-
+            }, { threshold: 0.01, rootMargin: '0px 0px -40px 0px' });
             revealEls.forEach((el: any) => revealObserver.observe(el));
         }
 
@@ -404,9 +318,7 @@ const testimonials = await client.fetch(`*[_type == "testimonial"] | order(_crea
             let current = '';
             sections.forEach((section: any) => {
                 const sectionTop = section.offsetTop - 120;
-                if (window.scrollY >= sectionTop) {
-                    current = section.getAttribute('id');
-                }
+                if (window.scrollY >= sectionTop) current = section.getAttribute('id');
             });
             navLinksAll.forEach((link: any) => {
                 if(link.getAttribute('href') === '#' + current) {
@@ -424,7 +336,6 @@ const testimonials = await client.fetch(`*[_type == "testimonial"] | order(_crea
         if (contactForm && formSuccess) {
             contactForm.addEventListener('submit', function(e: Event) {
                 e.preventDefault();
-
                 const submitBtn = contactForm.querySelector('button[type="submit"]') as HTMLButtonElement | null;
                 if (!submitBtn) return;
 
@@ -435,10 +346,7 @@ const testimonials = await client.fetch(`*[_type == "testimonial"] | order(_crea
 
                 const formData = new FormData(contactForm);
 
-                fetch('https://api.web3forms.com/submit', {
-                    method: 'POST',
-                    body: formData
-                })
+                fetch('https://api.web3forms.com/submit', { method: 'POST', body: formData })
                 .then(async (response) => {
                     if (response.status == 200) {
                         contactForm.style.display = 'none';

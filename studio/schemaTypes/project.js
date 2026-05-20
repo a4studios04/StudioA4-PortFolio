@@ -3,21 +3,30 @@ export default {
   title: 'Portfolio Project',
   type: 'document',
   fields: [
+    // CORE INFO (Homepage)
     { name: 'title', title: 'Project Title', type: 'string' },
     { name: 'slug', title: 'URL Slug', type: 'slug', options: { source: 'title', maxLength: 96 } },
-    { name: 'mainImage', title: 'Showcase Image (Thumbnail)', type: 'image', options: { hotspot: true } },
-    { name: 'tag', title: 'Category Tag', type: 'string' },
-    { name: 'subtitle', title: 'Subtitle', type: 'string' },
-    { name: 'projectNumber', title: 'Project Number', type: 'string' },
-    { name: 'description', title: 'Full Project Story', type: 'text' },
-    { name: 'gallery', title: 'Process Gallery', type: 'array', of: [{ type: 'image' }], options: { layout: 'grid' } },
-    { name: 'videoUrl', title: 'YouTube/Vimeo Link', type: 'url' },
+    { name: 'mainImage', title: 'Thumbnail', type: 'image', options: { hotspot: true } },
+    { name: 'tag', title: 'Category', type: 'string' },
+    
+    // DEEP DIVE (The project page)
+    { name: 'description', title: 'Story / Process Text', type: 'text' },
+    { name: 'gallery', title: 'Process Images', type: 'array', of: [{ type: 'image' }] },
+    { name: 'shortVideo', title: 'Cinematic Video (MP4)', type: 'file', options: { accept: 'video/*' } },
+    { name: 'videoUrl', title: 'YouTube/Vimeo Embed URL', type: 'url' },
+    
+    // SOCIAL LINKS
     { 
-      name: 'shortVideo', 
-      title: 'Background Loop Video', 
-      type: 'file', 
-      options: { accept: 'video/mp4,video/x-matroska,video/quicktime,video/x-msvideo' },
-      description: 'Upload MP4, MKV, MOV, or AVI. Keep file size small!'
-    },
+      name: 'socialLinks', 
+      title: 'Where is this hosted?', 
+      type: 'array', 
+      of: [{ 
+        type: 'object', 
+        fields: [
+          { name: 'platform', type: 'string', title: 'Platform (e.g., ArtStation)' },
+          { name: 'url', type: 'url', title: 'URL' }
+        ] 
+      }] 
+    }
   ],
 }
