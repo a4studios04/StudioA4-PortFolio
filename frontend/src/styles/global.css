@@ -425,7 +425,7 @@ body {
 .footer-links h4 { font-weight: 700; font-size: 0.85rem; letter-spacing: 0.06em; text-transform: uppercase; margin-bottom: 20px; color: var(--text-primary); }
 .footer-links a { display: block; color: var(--text-muted); text-decoration: none; margin-bottom: 12px; font-size: 0.95rem; transition: var(--transition-fast); }
 .footer-links a:hover { color: #fff; padding-left: 4px; }
-.footer-bottom { max-width: 1280px; margin: 50px auto 0; padding-top: 28px; border-top: 1px solid var(--border-subtle); display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 16px; color: var(--text-muted); font-size: 0.85rem; }
+.footer-bottom { max-width: 1280px; margin: 50px auto 0; padding-top: 28px; border-top: 1px solid var(--border-subtle); display: flex; justify-content: center; align-items: center; flex-wrap: wrap; gap: 16px; color: var(--text-muted); font-size: 0.85rem; }
 
 /* SCROLL REVEAL */
 .reveal { opacity: 0; transform: translateY(60px); transition: opacity 0.9s ease, transform 0.9s cubic-bezier(0.22, 0.61, 0.36, 1); }
