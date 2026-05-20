@@ -476,3 +476,57 @@ body {
     .about-accent-box { width: 100px; height: 100px; bottom: -16px; right: -16px; }
     .footer-bottom { flex-direction: column; text-align: center; }
 }
+/* ==========================================================================
+   MOBILE RESPONSIVENESS OVERRIDE (Phones & Small Tablets)
+   ========================================================================== */
+
+@media (max-width: 768px) {
+    /* 1. Tighten up the massive desktop spacing */
+    .section, .project-details { 
+        padding: 60px 20px !important; 
+    }
+    .hero { 
+        padding: 120px 20px 60px !important; 
+    }
+    .section-inner {
+        padding: 0 !important;
+    }
+
+    /* 2. Force all horizontal grids into a single vertical column */
+    .work-grid, 
+    .about-grid, 
+    .contact-grid {
+        display: grid !important;
+        grid-template-columns: 1fr !important;
+        gap: 40px !important;
+    }
+
+    /* 3. Scale down the massive typography */
+    .hero-headline { 
+        font-size: clamp(2.5rem, 10vw, 4rem) !important; 
+    }
+    .section-title { 
+        font-size: clamp(2rem, 8vw, 3rem) !important; 
+    }
+
+    /* 4. Hide Desktop Nav & Show Hamburger Menu */
+    .nav-links { 
+        display: none !important; 
+    }
+    .nav-hamburger { 
+        display: flex !important; /* Ensures your JS menu works */
+    }
+
+    /* 5. Center and stack the footer */
+    .footer-inner { 
+        display: flex !important;
+        flex-direction: column !important; 
+        text-align: center !important; 
+        gap: 40px !important; 
+    }
+    .footer-links { 
+        display: flex;
+        flex-direction: column;
+        align-items: center !important; 
+    }
+}
