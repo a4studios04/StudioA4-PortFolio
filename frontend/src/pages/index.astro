@@ -93,7 +93,7 @@ const testimonials = await client.fetch(`*[_type == "testimonial"] | order(_crea
                 {projects.map((project: any, index: number) => (
                     <a href={`/project/${project.slug?.current}`} class={`work-item reveal reveal-d${(index % 4) + 1}`} style="display: block; text-decoration: none;">
                         <div class="work-item-inner">
-                            {/* Apple Standard: Rely purely on optimized static images for grid performance */}
+                            {/* Logic to show static image on grid to keep homepage ultra-fast */}
                             {project.mainImage ? (
                                 <img 
                                     src={urlFor(project.mainImage).width(800).url()} 
@@ -117,50 +117,71 @@ const testimonials = await client.fetch(`*[_type == "testimonial"] | order(_crea
         </div>
     </section>
 
-    <section class="section" id="services">
-        <div class="section-inner">
-            <span class="section-label reveal">Expertise</span>
-            <h2 class="section-title reveal reveal-d1">Designing worlds<br>that feel alive.</h2>
+    <section class="section" id="services" style="padding: 140px 0;">
+        <div class="section-inner" style="max-width: 1200px; margin: 0 auto;">
+            <span class="reveal" style="color: #ff4d4d; font-size: 0.8rem; font-weight: 700; letter-spacing: 0.15em; text-transform: uppercase; display: block; margin-bottom: 20px;">
+                <span style="font-size: 1.2rem; vertical-align: middle; margin-right: 5px;">&bull;</span> EXPERTISE
+            </span>
             
-            <div class="services-grid" style="grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));">
-                <div class="service-card reveal reveal-d1">
-                    <div class="service-image"><div class="service-badge">3D</div><img src="https://images.unsplash.com/photo-1605810230434-7631ac76ec81?q=80&w=800&auto=format&fit=crop" alt="3D Art & Visuals" class="img-content"></div>
-                    <h3 class="service-title"><span class="accent-num">1.</span> 3D Art & Visuals</h3>
-                    <p class="service-desc">High-quality 3D renders, key visuals, and cinematic compositions for games, brands, music, and digital experiences.</p>
-                    <div class="service-tags">MODELING &bull; TEXTURING &bull; LIGHTING &bull; RENDERING</div>
+            <h2 class="reveal reveal-d1" style="font-family: var(--font-display); font-size: clamp(3rem, 6vw, 5.5rem); line-height: 1.05; margin-bottom: 80px; letter-spacing: -0.02em;">
+                Designing worlds<br>that feel alive.
+            </h2>
+            
+            <div class="services-grid" style="display: grid; grid-template-columns: repeat(auto-fit, minmax(320px, 1fr)); gap: 60px 40px;">
+                
+                <div class="service-text-card reveal reveal-d1">
+                    <h3 style="font-size: 1.4rem; font-weight: 600; margin-bottom: 15px; display: flex; align-items: center; gap: 12px; color: #fff;">
+                        <span style="color: #ff4d4d;">1.</span> 3D Art & Visuals
+                    </h3>
+                    <hr style="border: none; border-top: 1px solid rgba(255,255,255,0.2); margin-bottom: 25px;">
+                    <p style="color: rgba(255,255,255,0.65); line-height: 1.6; font-size: 1rem; margin-bottom: 25px; max-width: 90%;">High-quality 3D renders, key visuals, and cinematic compositions for games, brands, music, and digital experiences.</p>
+                    <div style="font-size: 0.7rem; color: rgba(255,255,255,0.35); text-transform: uppercase; letter-spacing: 0.1em;">MODELING &bull; TEXTURING &bull; LIGHTING &bull; RENDERING</div>
                 </div>
 
-                <div class="service-card reveal reveal-d2">
-                    <div class="service-image"><div class="service-badge">2D</div><img src="https://images.unsplash.com/photo-1578632767115-351597cf2477?q=80&w=800&auto=format&fit=crop" alt="2D Art & Illustration" class="img-content"></div>
-                    <h3 class="service-title"><span class="accent-num">2.</span> 2D Art & Illustration</h3>
-                    <p class="service-desc">Stylized illustrations and key art with strong composition, color, and mood to tell powerful stories and build striking visuals.</p>
-                    <div class="service-tags">CONCEPT ART &bull; ILLUSTRATION &bull; KEY VISUALS</div>
+                <div class="service-text-card reveal reveal-d2">
+                    <h3 style="font-size: 1.4rem; font-weight: 600; margin-bottom: 15px; display: flex; align-items: center; gap: 12px; color: #fff;">
+                        <span style="color: #ff4d4d;">2.</span> 2D Art & Illustration
+                    </h3>
+                    <hr style="border: none; border-top: 1px solid rgba(255,255,255,0.2); margin-bottom: 25px;">
+                    <p style="color: rgba(255,255,255,0.65); line-height: 1.6; font-size: 1rem; margin-bottom: 25px; max-width: 90%;">Stylized illustrations and key art with strong composition, color, and mood to tell powerful stories and build striking visuals.</p>
+                    <div style="font-size: 0.7rem; color: rgba(255,255,255,0.35); text-transform: uppercase; letter-spacing: 0.1em;">CONCEPT ART &bull; ILLUSTRATION &bull; KEY VISUALS</div>
                 </div>
 
-                <div class="service-card reveal reveal-d3">
-                    <div class="service-image"><div class="service-badge"><svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="18" height="18" rx="2" ry="2"></rect><line x1="12" y1="3" x2="12" y2="21"></line></svg></div><img src="https://images.unsplash.com/photo-1607604276583-eef5d076aa5f?q=80&w=800&auto=format&fit=crop" alt="Manga Panels" class="img-content" /></div>
-                    <h3 class="service-title"><span class="accent-num">3.</span> Manga Panels</h3>
-                    <p class="service-desc">Dynamic manga panels and comic layouts crafted for storytelling, rhythm, and high visual impact.</p>
-                    <div class="service-tags">PANELING &bull; INKING &bull; TONES &bull; COMPOSITION</div>
+                <div class="service-text-card reveal reveal-d3">
+                    <h3 style="font-size: 1.4rem; font-weight: 600; margin-bottom: 15px; display: flex; align-items: center; gap: 12px; color: #fff;">
+                        <span style="color: #ff4d4d;">3.</span> Manga Panels
+                    </h3>
+                    <hr style="border: none; border-top: 1px solid rgba(255,255,255,0.2); margin-bottom: 25px;">
+                    <p style="color: rgba(255,255,255,0.65); line-height: 1.6; font-size: 1rem; margin-bottom: 25px; max-width: 90%;">Dynamic manga panels and comic layouts crafted for storytelling, rhythm, and high visual impact.</p>
+                    <div style="font-size: 0.7rem; color: rgba(255,255,255,0.35); text-transform: uppercase; letter-spacing: 0.1em;">PANELING &bull; INKING &bull; TONES &bull; COMPOSITION</div>
                 </div>
 
-                <div class="service-card reveal reveal-d4">
-                    <div class="service-image"><div class="service-badge"><svg viewBox="0 0 24 24" fill="none" stroke-width="2"><path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"></path><polyline points="3.27 6.96 12 12.01 20.73 6.96"></polyline><line x1="12" y1="22.08" x2="12" y2="12"></line></svg></div><img src="https://images.unsplash.com/photo-1618336753974-aae8e04506aa?q=80&w=800&auto=format&fit=crop" alt="Environment Design" class="img-content"></div>
-                    <h3 class="service-title"><span class="accent-num">4.</span> Environment Design</h3>
-                    <p class="service-desc">Immersive environments and worldbuilding designs for games, animation, and cinematic projects.</p>
-                    <div class="service-tags">WORLD BUILDING &bull; 3D ENVIRONMENTS &bull; MATTE PAINTING</div>
+                <div class="service-text-card reveal reveal-d4">
+                    <h3 style="font-size: 1.4rem; font-weight: 600; margin-bottom: 15px; display: flex; align-items: center; gap: 12px; color: #fff;">
+                        <span style="color: #ff4d4d;">4.</span> Environment Design
+                    </h3>
+                    <hr style="border: none; border-top: 1px solid rgba(255,255,255,0.2); margin-bottom: 25px;">
+                    <p style="color: rgba(255,255,255,0.65); line-height: 1.6; font-size: 1rem; margin-bottom: 25px; max-width: 90%;">Immersive environments that set the scene—designed with mood, detail, and storytelling in mind.</p>
+                    <div style="font-size: 0.7rem; color: rgba(255,255,255,0.35); text-transform: uppercase; letter-spacing: 0.1em;">WORLD BUILDING &bull; LAYOUT &bull; ATMOSPHERE</div>
                 </div>
 
-                <div class="service-card reveal reveal-d5">
-                    <div class="service-image"><div class="service-badge"><svg viewBox="0 0 24 24" fill="none" stroke-width="2"><polygon points="5 3 19 12 5 21 5 3"></polygon></svg></div><img src="https://images.unsplash.com/photo-1550684848-fac1c5b4e853?q=80&w=800&auto=format&fit=crop" alt="Motion Design & Animation" class="img-content"></div>
-                    <h3 class="service-title"><span class="accent-num">5.</span> Motion Design & Animation</h3>
-                    <p class="service-desc">Cinematic animations, motion graphics, and visual effects that bring ideas to life with rhythm and impact.</p>
-                    <div class="service-tags">ANIMATION &bull; VFX &bull; MOTION GRAPHICS &bull; COMPOSITING</div>
+                <div class="service-text-card reveal reveal-d5">
+                    <h3 style="font-size: 1.4rem; font-weight: 600; margin-bottom: 15px; display: flex; align-items: center; gap: 12px; color: #fff;">
+                        <span style="color: #ff4d4d;">5.</span> Motion Design & Animation
+                    </h3>
+                    <hr style="border: none; border-top: 1px solid rgba(255,255,255,0.2); margin-bottom: 25px;">
+                    <p style="color: rgba(255,255,255,0.65); line-height: 1.6; font-size: 1rem; margin-bottom: 25px; max-width: 90%;">Engaging motion graphics and animations that bring ideas to life and elevate your brand or story.</p>
+                    <div style="font-size: 0.7rem; color: rgba(255,255,255,0.35); text-transform: uppercase; letter-spacing: 0.1em;">ANIMATION &bull; TRANSITIONS &bull; VISUAL EFFECTS</div>
                 </div>
+            </div>
+
+            <div class="reveal reveal-d3" style="display: flex; justify-content: center; margin-top: 80px;">
+                <a href="#work" style="display: inline-flex; align-items: center; gap: 15px; padding: 14px 36px; border: 1px solid rgba(255,255,255,0.2); border-radius: 50px; color: #fff; text-decoration: none; font-family: var(--font-body); font-weight: 600; font-size: 0.95rem; transition: background 0.3s ease, border-color 0.3s ease;">
+                    View Work <span style="color: #ff4d4d; font-size: 1.3rem; line-height: 0;">&rarr;</span>
+                </a>
             </div>
         </div>
     </section>
-
     <section class="section" id="about">
         <div class="section-inner">
             <div class="about-grid">
