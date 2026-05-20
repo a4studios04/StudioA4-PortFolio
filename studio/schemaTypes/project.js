@@ -7,7 +7,19 @@ export default {
     { name: 'title', title: 'Project Title', type: 'string' },
     { name: 'slug', title: 'URL Slug', type: 'slug', options: { source: 'title', maxLength: 96 } },
     { name: 'mainImage', title: 'Thumbnail', type: 'image', options: { hotspot: true } },
-    { name: 'tag', title: 'Category', type: 'string' },
+    { 
+      name: 'tag', 
+      title: 'Role / Service', 
+      type: 'string',
+      description: 'e.g., 3D Blender, Illustration, Environment Design'
+    },
+    { 
+      name: 'subtitle', 
+      title: 'Client / Category', 
+      type: 'string',
+      description: 'e.g., Commission Work, Personal Project, Studio A4'
+    },
+    { name: 'projectNumber', title: 'Project Number', type: 'string', description: 'e.g., 01, 02, 03' },
     
     // DEEP DIVE (The project page)
     { name: 'description', title: 'Story / Process Text', type: 'text' },

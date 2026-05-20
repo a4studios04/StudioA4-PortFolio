@@ -16,7 +16,6 @@ export async function getStaticPaths() {
     });
 }
 
-// APPLE-STANDARD TYPE CASTING: Resolves the TypeScript 'never' problem permanently
 interface ProjectProps {
     title?: string;
     tag?: string;
@@ -94,12 +93,10 @@ const posterUrl = project.mainImage ? urlFor(project.mainImage).width(1920).url(
         }
         .social-btn:hover { background: #ff4d4d; color: #fff; transform: translateY(-2px); box-shadow: 0 4px 12px rgba(255, 77, 77, 0.2); }
 
-        /* SLEEK ASYMMETRIC MASONRY GALLERY */
         .project-gallery { padding: 0 60px 120px; max-width: 1400px; margin: 0 auto; column-count: 2; column-gap: 30px; }
         .gallery-img { width: 100%; margin-bottom: 30px; border-radius: 16px; display: block; break-inside: avoid; border: 1px solid rgba(255,255,255,0.05); transition: transform 0.4s ease; }
         .gallery-img:hover { transform: scale(1.01); }
 
-        /* MATTE STYLED YOUTUBE EMBED CONTAINER */
         .cinematic-embed-wrapper { 
             margin-top: 45px; 
             width: 100%; 
@@ -144,8 +141,11 @@ const posterUrl = project.mainImage ? urlFor(project.mainImage).width(1920).url(
 
     <section class="project-details">
         <div class="project-meta reveal reveal-d1">
-            <h3>Role / Tag</h3> <p>{project.tag}</p>
-            <h3>Category</h3> <p>{project.subtitle}</p>
+            <h3>Role / Service</h3> 
+            <p>{project.tag || "N/A"}</p>
+            
+            <h3>Client / Category</h3> 
+            <p>{project.subtitle || "N/A"}</p>
         </div>
         <div class="project-info reveal reveal-d2">
             <div class="project-description">{project.description || "In-depth case study coming soon."}</div>
