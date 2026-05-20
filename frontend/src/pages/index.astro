@@ -93,7 +93,6 @@ const testimonials = await client.fetch(`*[_type == "testimonial"] | order(_crea
                 {projects.map((project: any, index: number) => (
                     <a href={`/project/${project.slug?.current}`} class={`work-item reveal reveal-d${(index % 4) + 1}`} style="display: block; text-decoration: none;">
                         <div class="work-item-inner">
-                            {/* Logic to show static image on grid to keep homepage ultra-fast */}
                             {project.mainImage ? (
                                 <img 
                                     src={urlFor(project.mainImage).width(800).url()} 
@@ -127,9 +126,10 @@ const testimonials = await client.fetch(`*[_type == "testimonial"] | order(_crea
                 Designing worlds<br>that feel alive.
             </h2>
             
-            <div class="services-grid" style="display: grid; grid-template-columns: repeat(auto-fit, minmax(320px, 1fr)); gap: 60px 40px;">
+            {/* SWITCHED TO FLEXBOX FOR PERFECT SYMMETRICAL CENTERING */}
+            <div class="services-grid" style="display: flex; flex-wrap: wrap; justify-content: center; gap: 60px 40px;">
                 
-                <div class="service-text-card reveal reveal-d1">
+                <div class="service-text-card reveal reveal-d1" style="flex: 1 1 300px; max-width: 360px;">
                     <h3 style="font-size: 1.4rem; font-weight: 600; margin-bottom: 15px; display: flex; align-items: center; gap: 12px; color: #fff;">
                         <span style="color: #ff4d4d;">1.</span> 3D Art & Visuals
                     </h3>
@@ -138,7 +138,7 @@ const testimonials = await client.fetch(`*[_type == "testimonial"] | order(_crea
                     <div style="font-size: 0.7rem; color: rgba(255,255,255,0.35); text-transform: uppercase; letter-spacing: 0.1em;">MODELING &bull; TEXTURING &bull; LIGHTING &bull; RENDERING</div>
                 </div>
 
-                <div class="service-text-card reveal reveal-d2">
+                <div class="service-text-card reveal reveal-d2" style="flex: 1 1 300px; max-width: 360px;">
                     <h3 style="font-size: 1.4rem; font-weight: 600; margin-bottom: 15px; display: flex; align-items: center; gap: 12px; color: #fff;">
                         <span style="color: #ff4d4d;">2.</span> 2D Art & Illustration
                     </h3>
@@ -147,7 +147,7 @@ const testimonials = await client.fetch(`*[_type == "testimonial"] | order(_crea
                     <div style="font-size: 0.7rem; color: rgba(255,255,255,0.35); text-transform: uppercase; letter-spacing: 0.1em;">CONCEPT ART &bull; ILLUSTRATION &bull; KEY VISUALS</div>
                 </div>
 
-                <div class="service-text-card reveal reveal-d3">
+                <div class="service-text-card reveal reveal-d3" style="flex: 1 1 300px; max-width: 360px;">
                     <h3 style="font-size: 1.4rem; font-weight: 600; margin-bottom: 15px; display: flex; align-items: center; gap: 12px; color: #fff;">
                         <span style="color: #ff4d4d;">3.</span> Manga Panels
                     </h3>
@@ -156,7 +156,7 @@ const testimonials = await client.fetch(`*[_type == "testimonial"] | order(_crea
                     <div style="font-size: 0.7rem; color: rgba(255,255,255,0.35); text-transform: uppercase; letter-spacing: 0.1em;">PANELING &bull; INKING &bull; TONES &bull; COMPOSITION</div>
                 </div>
 
-                <div class="service-text-card reveal reveal-d4">
+                <div class="service-text-card reveal reveal-d4" style="flex: 1 1 300px; max-width: 360px;">
                     <h3 style="font-size: 1.4rem; font-weight: 600; margin-bottom: 15px; display: flex; align-items: center; gap: 12px; color: #fff;">
                         <span style="color: #ff4d4d;">4.</span> Environment Design
                     </h3>
@@ -165,7 +165,7 @@ const testimonials = await client.fetch(`*[_type == "testimonial"] | order(_crea
                     <div style="font-size: 0.7rem; color: rgba(255,255,255,0.35); text-transform: uppercase; letter-spacing: 0.1em;">WORLD BUILDING &bull; LAYOUT &bull; ATMOSPHERE</div>
                 </div>
 
-                <div class="service-text-card reveal reveal-d5">
+                <div class="service-text-card reveal reveal-d5" style="flex: 1 1 300px; max-width: 360px;">
                     <h3 style="font-size: 1.4rem; font-weight: 600; margin-bottom: 15px; display: flex; align-items: center; gap: 12px; color: #fff;">
                         <span style="color: #ff4d4d;">5.</span> Motion Design & Animation
                     </h3>
