@@ -233,6 +233,10 @@ const testimonials = await client.fetch(`
     </section>
 
     <section class="section" style="background:var(--bg-secondary); overflow:hidden; padding: 100px 0;">
+        <div class="section-inner" style="margin-bottom: 60px; padding: 0 60px;">
+            <span class="section-label reveal">Client Feedback</span>
+            <h2 class="section-title reveal reveal-d1" style="margin: 0;">What they say about us.</h2>
+        </div>
         <div class="reviews-marquee-container">
             <div class="reviews-marquee-track">
                 {testimonials.map((review: any) => (

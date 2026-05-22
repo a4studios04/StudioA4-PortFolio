@@ -328,6 +328,14 @@ body {
     flex-direction: column;
     justify-content: space-between;
 }
+/* Add this new media query immediately below the rule above */
+@media (max-width: 768px) {
+    .reviews-marquee-track .testimonial-card {
+        flex: 0 0 85vw !important; /* Forces cards to take 85% of screen width */
+        width: 85vw !important;
+        margin-right: 16px; /* Ensures there's a gap before the next card peeks in */
+    }
+}
 .reviews-marquee-track .testimonial-quote {
     font-family: var(--font-body);
     font-size: 1.02rem;
