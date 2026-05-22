@@ -23,7 +23,21 @@ export default {
     
     // DEEP DIVE (The project page)
     { name: 'description', title: 'Story / Process Text', type: 'text' },
-    { name: 'gallery', title: 'Process Images', type: 'array', of: [{ type: 'image' }] },
+    
+    // UPDATED: Split Gallery into WIP and Final Work
+    { 
+      name: 'wipImages', 
+      title: 'WIP (Work In Progress) Images', 
+      type: 'array', 
+      of: [{ type: 'image', options: { hotspot: true } }] 
+    },
+    { 
+      name: 'finalImages', 
+      title: 'Final Artwork', 
+      type: 'array', 
+      of: [{ type: 'image', options: { hotspot: true } }] 
+    },
+    
     { name: 'shortVideo', title: 'Cinematic Video (MP4)', type: 'file', options: { accept: 'video/*' } },
     { name: 'videoUrl', title: 'YouTube/Vimeo Embed URL', type: 'url' },
     

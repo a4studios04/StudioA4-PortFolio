@@ -25,6 +25,8 @@ interface ProjectProps {
     videoUrl?: string;
     mainImage?: any;
     gallery?: any[];
+    wipImages?: any[];
+    finalImages?: any[];
     socialLinks?: Array<{ platform: string; url: string }>;
 }
 
@@ -122,7 +124,7 @@ const posterUrl = project.mainImage ? urlFor(project.mainImage).width(1920).url(
 </head>
 <body>
     <nav class="nav" style="background: transparent; border: none; backdrop-filter: none; -webkit-backdrop-filter: none;">
-        <img src="/favicon.svg" alt="Studio A4 Logo" style="height: 40px; width: auto; display: block;" />
+        <a href="/" class="nav-logo">
             <img src="/favicon.svg" alt="Studio A4 Logo" style="height: 40px; width: auto; display: block;" />
         </a>
     </nav>
@@ -178,10 +180,22 @@ const posterUrl = project.mainImage ? urlFor(project.mainImage).width(1920).url(
         </div>
     </section>
 
-    {project.gallery && project.gallery.length > 0 && (
+    {/* WIP SECTION */}
+    {project.wipImages && project.wipImages.length > 0 && (
         <section class="project-gallery">
-            {project.gallery.map((image: any, index: number) => (
-                <img src={urlFor(image).width(1200).url()} alt={`Process Layout ${index + 1}`} class={`gallery-img reveal reveal-d${(index % 3) + 1}`} loading="lazy" />
+            <h2 style="color: #fff; margin-bottom: 30px; padding-left: 60px; font-family: 'Syne', sans-serif;">Work in Progress</h2>
+            {project.wipImages.map((image: any, index: number) => (
+                <img src={urlFor(image).width(1200).url()} alt={`WIP ${index + 1}`} class={`gallery-img reveal reveal-d${(index % 3) + 1}`} loading="lazy" />
+            ))}
+        </section>
+    )}
+
+    {/* FINAL ARTWORK SECTION */}
+    {project.finalImages && project.finalImages.length > 0 && (
+        <section class="project-gallery">
+            <h2 style="color: #fff; margin-bottom: 30px; padding-left: 60px; font-family: 'Syne', sans-serif;">Final Artwork</h2>
+            {project.finalImages.map((image: any, index: number) => (
+                <img src={urlFor(image).width(1200).url()} alt={`Final ${index + 1}`} class={`gallery-img reveal reveal-d${(index % 3) + 1}`} loading="lazy" />
             ))}
         </section>
     )}
