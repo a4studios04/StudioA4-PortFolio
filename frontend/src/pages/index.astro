@@ -22,9 +22,15 @@ const testimonials = await client.fetch(`
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Studio A4 — Creative Design Studio</title>
+
+    <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
+    <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+    <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
+    <link rel="manifest" href="/site.webmanifest">
+    
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link href="https://fonts.googleapis.com/css2?family=DM+Sans:opsz,wght@9..40,300;9..40,400;9..40,500;9..40,600;9..40,700;9..40,800&family=Syne:wght@400;500;600;700;800&display=swap" rel="stylesheet">
-    
+
     <style>
         /* Sleek style for the new Preview Work button */
         .preview-work-btn {
@@ -46,7 +52,9 @@ const testimonials = await client.fetch(`
 <body>
 
     <nav class="nav" id="navbar">
-        <a href="#" class="nav-logo">A<span>4</span></a>
+        <a href="/" class="nav-logo">
+    <img src="/favicon.svg" alt="Studio A4 Logo" />
+</a>
         <ul class="nav-links">
             <li><a href="#work">Work</a></li>
             <li><a href="#services">Expertise</a></li>
