@@ -34,9 +34,23 @@ body { font-family: var(--font-body); background: var(--bg-primary); color: var(
 .nav.scrolled { border-bottom: 1px solid var(--border-subtle); }
 .nav-logo { font-family: var(--font-display); font-weight: 800; font-size: 1.8rem; letter-spacing: -0.02em; color: #fff; text-decoration: none; display: flex; align-items: center; }
 
-/* --- LOGO SIZE FIXES (Prevents the massive explosion) --- */
-.nav-logo img { height: 40px !important; width: auto !important; display: block !important; }
-.footer-brand img { height: 50px !important; width: auto !important; display: block !important; margin-bottom: 16px; }
+/* --- LOGO SIZE FIXES (Scaled Up for Impact) --- */
+.nav-logo img { 
+    height: 52px !important; /* Scaled up from 40px */
+    width: auto !important; 
+    display: block !important; 
+    transition: transform var(--transition-fast);
+}
+.nav-logo img:hover {
+    transform: scale(1.03); /* Subtle premium interactive feel on hover */
+}
+
+.footer-brand img { 
+    height: 68px !important; /* Scaled up from 50px */
+    width: auto !important; 
+    display: block !important; 
+    margin-bottom: 20px; 
+}
 
 .nav-links { display: flex; gap: 48px; list-style: none; }
 .nav-links a { text-decoration: none; color: #fff; font-weight: 500; font-size: 0.95rem; letter-spacing: 0.01em; transition: var(--transition-fast); position: relative; }
