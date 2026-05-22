@@ -21,7 +21,7 @@ const testimonials = await client.fetch(`
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>StudioA4</title>
+    <title>Studio A4 — Creative Design Studio</title>
 
     <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
     <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
@@ -239,12 +239,20 @@ const testimonials = await client.fetch(`
                     <div class="testimonial-card" style="display: flex; flex-direction: column;">
                         <p class="testimonial-quote">{review.quote}</p>
                         
+                        {/* New Flexbox Layout for the Avatar + Project Link + Date */}
                         <div style="display: flex; justify-content: space-between; align-items: flex-end; margin-top: auto; padding-top: 20px;">
                             <div class="testimonial-author" style="margin: 0;">
                                 <svg class="testimonial-avatar" viewBox="0 0 48 48" xmlns="http://www.w3.org/2000/svg"><circle cx="24" cy="24" r="24" fill="#334155"/><circle cx="24" cy="18" r="9" fill="#94a3b8"/><ellipse cx="24" cy="40" rx="16" ry="10" fill="#94a3b8"/></svg>
-                                <div><h4>{review.clientName}</h4><span>{review.clientTitle || 'Client'}</span></div>
+                                <div>
+                                    <h4>{review.clientName}</h4>
+                                    <span>
+                                        {review.clientTitle || 'Client'}
+                                        {review.reviewDate ? ` • ${new Date(review.reviewDate).toLocaleDateString('en-US', { month: 'short', year: 'numeric' })}` : ''}
+                                    </span>
+                                </div>
                             </div>
                             
+                            {/* Conditional Preview Link */}
                             {review.projectRef?.slug?.current && (
                                 <a href={`/project/${review.projectRef.slug.current}`} class="preview-work-btn">
                                     Preview Work ↗
@@ -263,7 +271,13 @@ const testimonials = await client.fetch(`
                         <div style="display: flex; justify-content: space-between; align-items: flex-end; margin-top: auto; padding-top: 20px;">
                             <div class="testimonial-author" style="margin: 0;">
                                 <svg class="testimonial-avatar" viewBox="0 0 48 48" xmlns="http://www.w3.org/2000/svg"><circle cx="24" cy="24" r="24" fill="#334155"/><circle cx="24" cy="18" r="9" fill="#94a3b8"/><ellipse cx="24" cy="40" rx="16" ry="10" fill="#94a3b8"/></svg>
-                                <div><h4>{review.clientName}</h4><span>{review.clientTitle || 'Client'}</span></div>
+                                <div>
+                                    <h4>{review.clientName}</h4>
+                                    <span>
+                                        {review.clientTitle || 'Client'}
+                                        {review.reviewDate ? ` • ${new Date(review.reviewDate).toLocaleDateString('en-US', { month: 'short', year: 'numeric' })}` : ''}
+                                    </span>
+                                </div>
                             </div>
                             
                             {review.projectRef?.slug?.current && (

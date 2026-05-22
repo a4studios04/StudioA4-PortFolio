@@ -21,7 +21,16 @@ export default {
       type: 'string',
       description: 'e.g., Art Director, Indie Dev, or leave blank',
     },
-    // NEW FIELD: This creates a dropdown to select the actual project!
+    // NEW FIELD: Adds a clean date picker for the review
+    {
+      name: 'reviewDate',
+      title: 'Review Date',
+      type: 'date',
+      description: 'When did the client leave this review?',
+      options: {
+        dateFormat: 'MMMM YYYY', // Formats it cleanly in the studio
+      }
+    },
     {
       name: 'projectRef',
       title: 'Associated Project',

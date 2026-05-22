@@ -312,7 +312,7 @@ body {
     gap: 32px;
     padding: 20px 16px;
     white-space: normal;
-    animation: reviewsScroll 35s linear infinite; 
+    animation: reviewsScroll 60s linear infinite; 
 }
 .reviews-marquee-container:hover .reviews-marquee-track {
     animation-play-state: paused;
