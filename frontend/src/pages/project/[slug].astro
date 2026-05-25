@@ -39,7 +39,9 @@ function getYouTubeId(url: string | undefined) {
     return (match && match[2].length === 11) ? match[2] : null;
 }
 const ytId = getYouTubeId(project.videoUrl);
-const posterUrl = project.mainImage ? urlFor(project.mainImage).width(1920).url() : '';
+
+/* SAFETY FIX 1: Check if mainImage.asset actually exists before making URL */
+const posterUrl = project.mainImage && project.mainImage.asset ? urlFor(project.mainImage).width(1920).url() : '';
 ---
 
 <!DOCTYPE html>
@@ -154,7 +156,7 @@ const posterUrl = project.mainImage ? urlFor(project.mainImage).width(1920).url(
                 class="project-hero-media" 
                 autoplay muted loop playsinline 
             ></video>
-        ) : project.mainImage ? (
+        ) : project.mainImage && project.mainImage.asset ? (
             <img src={posterUrl} alt={project.title} class="project-hero-media" />
         ) : null}
         
@@ -202,7 +204,8 @@ const posterUrl = project.mainImage ? urlFor(project.mainImage).width(1920).url(
         <section class="gallery-container">
             <h2 class="gallery-heading">Final Artwork</h2>
             <div class="final-grid">
-                {project.finalImages.map((image: any, index: number) => (
+                {/* SAFETY FIX 2: Filter out empty images */}
+                {project.finalImages.filter((img: any) => img && img.asset).map((image: any, index: number) => (
                     <img src={urlFor(image).width(1920).url()} alt={`Final ${index + 1}`} class={`gallery-img-large reveal reveal-d${(index % 3) + 1}`} loading="lazy" />
                 ))}
             </div>
@@ -214,7 +217,8 @@ const posterUrl = project.mainImage ? urlFor(project.mainImage).width(1920).url(
         <section class="gallery-container">
             <h2 class="gallery-heading">Work in Progress</h2>
             <div class="wip-masonry">
-                {project.wipImages.map((image: any, index: number) => (
+                {/* SAFETY FIX 3: Filter out empty images */}
+                {project.wipImages.filter((img: any) => img && img.asset).map((image: any, index: number) => (
                     <img src={urlFor(image).width(800).url()} alt={`WIP ${index + 1}`} class={`gallery-img-half reveal reveal-d${(index % 3) + 1}`} loading="lazy" />
                 ))}
             </div>
