@@ -120,6 +120,23 @@ const posterUrl = project.mainImage ? urlFor(project.mainImage).width(1920).url(
             .project-details { grid-template-columns: 1fr; padding: 60px 20px; gap: 40px; }
             .project-gallery { column-count: 1; padding: 0 20px 80px; }
         }
+
+        /* --- NEW SECTION: FINAL & WIP LAYOUTS --- */
+        .gallery-container { padding: 0 60px 120px; max-width: 1400px; margin: 0 auto; }
+        .gallery-heading { color: #fff; margin-bottom: 40px; font-family: 'Syne', sans-serif; font-size: 2.2rem; }
+        
+        .final-grid { display: flex; flex-direction: column; gap: 40px; }
+        .gallery-img-large { width: 100%; border-radius: 16px; display: block; border: 1px solid rgba(255,255,255,0.05); transition: transform 0.4s ease; }
+        .gallery-img-large:hover { transform: scale(1.01); }
+
+        .wip-masonry { column-count: 2; column-gap: 30px; }
+        .gallery-img-half { width: 100%; margin-bottom: 30px; border-radius: 16px; display: block; break-inside: avoid; border: 1px solid rgba(255,255,255,0.05); transition: transform 0.4s ease; }
+        .gallery-img-half:hover { transform: scale(1.01); }
+
+        @media (max-width: 768px) {
+            .gallery-container { padding: 0 20px 80px; }
+            .wip-masonry { column-count: 1; }
+        }
     </style>
 </head>
 <body>
@@ -180,23 +197,27 @@ const posterUrl = project.mainImage ? urlFor(project.mainImage).width(1920).url(
         </div>
     </section>
 
-    {/* WIP SECTION */}
-    {project.wipImages && project.wipImages.length > 0 && (
-        <section class="project-gallery">
-            <h2 style="color: #fff; margin-bottom: 30px; padding-left: 60px; font-family: 'Syne', sans-serif;">Work in Progress</h2>
-            {project.wipImages.map((image: any, index: number) => (
-                <img src={urlFor(image).width(1200).url()} alt={`WIP ${index + 1}`} class={`gallery-img reveal reveal-d${(index % 3) + 1}`} loading="lazy" />
-            ))}
+    {/* FINAL ARTWORK SECTION (Placed first, large format) */}
+    {project.finalImages && project.finalImages.length > 0 && (
+        <section class="gallery-container">
+            <h2 class="gallery-heading">Final Artwork</h2>
+            <div class="final-grid">
+                {project.finalImages.map((image: any, index: number) => (
+                    <img src={urlFor(image).width(1920).url()} alt={`Final ${index + 1}`} class={`gallery-img-large reveal reveal-d${(index % 3) + 1}`} loading="lazy" />
+                ))}
+            </div>
         </section>
     )}
 
-    {/* FINAL ARTWORK SECTION */}
-    {project.finalImages && project.finalImages.length > 0 && (
-        <section class="project-gallery">
-            <h2 style="color: #fff; margin-bottom: 30px; padding-left: 60px; font-family: 'Syne', sans-serif;">Final Artwork</h2>
-            {project.finalImages.map((image: any, index: number) => (
-                <img src={urlFor(image).width(1200).url()} alt={`Final ${index + 1}`} class={`gallery-img reveal reveal-d${(index % 3) + 1}`} loading="lazy" />
-            ))}
+    {/* WIP SECTION (Placed second, masonry grid) */}
+    {project.wipImages && project.wipImages.length > 0 && (
+        <section class="gallery-container">
+            <h2 class="gallery-heading">Work in Progress</h2>
+            <div class="wip-masonry">
+                {project.wipImages.map((image: any, index: number) => (
+                    <img src={urlFor(image).width(800).url()} alt={`WIP ${index + 1}`} class={`gallery-img-half reveal reveal-d${(index % 3) + 1}`} loading="lazy" />
+                ))}
+            </div>
         </section>
     )}
 
