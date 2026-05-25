@@ -49,7 +49,7 @@ export default {
       of: [{ 
         type: 'object', 
         fields: [
-          { name: 'platform', type: 'string', title: 'Platform (e.g., ArtStation)' },
+          { name: 'platform', type: 'string', title: 'Platform (e.g., Instagram, Reddit, DeviantArt, ArtStation)' },
           { name: 'url', type: 'url', title: 'URL' }
         ] 
       }] 

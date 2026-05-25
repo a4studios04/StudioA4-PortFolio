@@ -42,6 +42,10 @@ const ytId = getYouTubeId(project.videoUrl);
 
 /* SAFETY FIX 1: Check if mainImage.asset actually exists before making URL */
 const posterUrl = project.mainImage && project.mainImage.asset ? urlFor(project.mainImage).width(1920).url() : '';
+
+/* SAFETY FIX 2: Pre-filter the arrays so ghost headers don't render */
+const validFinalImages = project.finalImages?.filter((img: any) => img && img.asset) || [];
+const validWipImages = project.wipImages?.filter((img: any) => img && img.asset) || [];
 ---
 
 <!DOCTYPE html>
@@ -199,26 +203,24 @@ const posterUrl = project.mainImage && project.mainImage.asset ? urlFor(project.
         </div>
     </section>
 
-    {/* FINAL ARTWORK SECTION (Placed first, large format) */}
-    {project.finalImages && project.finalImages.length > 0 && (
+    {/* FINAL ARTWORK SECTION (Now uses validFinalImages length to prevent ghost headers) */}
+    {validFinalImages.length > 0 && (
         <section class="gallery-container">
             <h2 class="gallery-heading">Final Artwork</h2>
             <div class="final-grid">
-                {/* SAFETY FIX 2: Filter out empty images */}
-                {project.finalImages.filter((img: any) => img && img.asset).map((image: any, index: number) => (
+                {validFinalImages.map((image: any, index: number) => (
                     <img src={urlFor(image).width(1920).url()} alt={`Final ${index + 1}`} class={`gallery-img-large reveal reveal-d${(index % 3) + 1}`} loading="lazy" />
                 ))}
             </div>
         </section>
     )}
 
-    {/* WIP SECTION (Placed second, masonry grid) */}
-    {project.wipImages && project.wipImages.length > 0 && (
+    {/* WIP SECTION (Now uses validWipImages length to prevent ghost headers) */}
+    {validWipImages.length > 0 && (
         <section class="gallery-container">
             <h2 class="gallery-heading">Work in Progress</h2>
             <div class="wip-masonry">
-                {/* SAFETY FIX 3: Filter out empty images */}
-                {project.wipImages.filter((img: any) => img && img.asset).map((image: any, index: number) => (
+                {validWipImages.map((image: any, index: number) => (
                     <img src={urlFor(image).width(800).url()} alt={`WIP ${index + 1}`} class={`gallery-img-half reveal reveal-d${(index % 3) + 1}`} loading="lazy" />
                 ))}
             </div>
