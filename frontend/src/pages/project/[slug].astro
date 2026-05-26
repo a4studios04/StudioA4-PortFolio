@@ -3,15 +3,20 @@ import '../../styles/global.css';
 import { client, urlFor } from '../../utils/sanity.js';
 
 export async function getStaticPaths() {
-    const projects = await client.fetch(`*[_type == "project" && defined(slug.current)]{
+    // We fetch ALL projects ordered by projectNumber so we can calculate Next/Prev
+    const projects = await client.fetch(`*[_type == "project" && defined(slug.current)] | order(projectNumber asc) {
         ...,
         "shortVideoUrl": shortVideo.asset->url
     }`);
 
-    return projects.map((project: any) => {
+    return projects.map((project: any, index: number) => {
+        // Calculate the previous and next projects in the array
+        const prevProject = index > 0 ? projects[index - 1] : null;
+        const nextProject = index < projects.length - 1 ? projects[index + 1] : null;
+
         return {
             params: { slug: project.slug.current },
-            props: { project }, 
+            props: { project, prevProject, nextProject }, 
         };
     });
 }
@@ -28,9 +33,10 @@ interface ProjectProps {
     wipImages?: any[];
     finalImages?: any[];
     socialLinks?: Array<{ platform: string; url: string }>;
+    projectNumber?: string;
 }
 
-const { project } = Astro.props as { project: ProjectProps };
+const { project, prevProject, nextProject } = Astro.props as { project: ProjectProps, prevProject: any, nextProject: any };
 
 function getYouTubeId(url: string | undefined) {
     if(!url) return null;
@@ -43,9 +49,12 @@ const ytId = getYouTubeId(project.videoUrl);
 /* SAFETY FIX 1: Check if mainImage.asset actually exists before making URL */
 const posterUrl = project.mainImage && project.mainImage.asset ? urlFor(project.mainImage).width(1920).url() : '';
 
+/* Open Graph specific image URL (smaller for social sharing) */
+const ogImageUrl = project.mainImage && project.mainImage.asset ? urlFor(project.mainImage).width(1200).height(630).url() : '';
+
 /* SAFETY FIX 2: Pre-filter the arrays so ghost headers don't render */
-const validFinalImages = project.finalImages?.filter((img: any) => img && img.asset) || [];
-const validWipImages = project.wipImages?.filter((img: any) => img && img.asset) || [];
+const validFinalImages = project.finalImages?.filter((img: any) => img && img.asset && img.asset._ref) || [];
+const validWipImages = project.wipImages?.filter((img: any) => img && img.asset && img.asset._ref) || [];
 ---
 
 <!DOCTYPE html>
@@ -54,6 +63,14 @@ const validWipImages = project.wipImages?.filter((img: any) => img && img.asset)
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>{project.title} — Studio A4</title>
+
+    {/* --- NEW: SEO & OPEN GRAPH METADATA --- */}
+    <meta name="description" content={project.description ? project.description.substring(0, 150) + '...' : 'A creative project by Studio A4.'} />
+    <meta property="og:title" content={`${project.title} — Studio A4`} />
+    <meta property="og:description" content={project.description ? project.description.substring(0, 150) + '...' : 'A creative project by Studio A4.'} />
+    <meta property="og:type" content="article" />
+    {ogImageUrl && <meta property="og:image" content={ogImageUrl} />}
+    <meta name="twitter:card" content="summary_large_image" />
 
     <link rel="icon" type="image/png" href="/favicon.png">
     
@@ -121,13 +138,7 @@ const validWipImages = project.wipImages?.filter((img: any) => img && img.asset)
         }
         .cinematic-embed-wrapper iframe { width: 100%; height: 100%; border: 0; }
 
-        @media (max-width: 768px) {
-            .project-hero { padding: 40px 20px; height: 50vh; }
-            .project-details { grid-template-columns: 1fr; padding: 60px 20px; gap: 40px; }
-            .project-gallery { column-count: 1; padding: 0 20px 80px; }
-        }
-
-        /* --- NEW SECTION: FINAL & WIP LAYOUTS --- */
+        /* --- FINAL & WIP LAYOUTS --- */
         .gallery-container { padding: 0 60px 120px; max-width: 1400px; margin: 0 auto; }
         .gallery-heading { color: #fff; margin-bottom: 40px; font-family: 'Syne', sans-serif; font-size: 2.2rem; }
         
@@ -139,9 +150,26 @@ const validWipImages = project.wipImages?.filter((img: any) => img && img.asset)
         .gallery-img-half { width: 100%; margin-bottom: 30px; border-radius: 16px; display: block; break-inside: avoid; border: 1px solid rgba(255,255,255,0.05); transition: transform 0.4s ease; }
         .gallery-img-half:hover { transform: scale(1.01); }
 
+        /* --- NEW: PROJECT NAVIGATION STYLES --- */
+        .project-navigation { display: flex; justify-content: space-between; max-width: 1400px; margin: 0 auto; padding: 0 60px 80px; border-top: 1px solid rgba(255,255,255,0.1); padding-top: 80px; }
+        .nav-card { flex: 1; text-decoration: none; display: flex; flex-direction: column; transition: transform 0.3s ease; }
+        .nav-card:hover { transform: translateY(-5px); }
+        .nav-card.prev { text-align: left; padding-right: 20px; border-right: 1px solid rgba(255,255,255,0.05); }
+        .nav-card.next { text-align: right; padding-left: 20px; }
+        .nav-label { color: rgba(255,255,255,0.4); font-family: 'Syne', sans-serif; text-transform: uppercase; font-size: 0.8rem; letter-spacing: 0.1em; margin-bottom: 10px; }
+        .nav-title { color: #fff; font-family: 'DM Sans', sans-serif; font-size: 1.5rem; font-weight: 600; margin: 0; }
+        .nav-title span { color: #ff4d4d; transition: margin 0.3s ease; }
+        .nav-card.prev:hover .nav-title span { margin-right: 8px; }
+        .nav-card.next:hover .nav-title span { margin-left: 8px; }
+
         @media (max-width: 768px) {
+            .project-hero { padding: 40px 20px; height: 50vh; }
+            .project-details { grid-template-columns: 1fr; padding: 60px 20px; gap: 40px; }
             .gallery-container { padding: 0 20px 80px; }
             .wip-masonry { column-count: 1; }
+            .project-navigation { flex-direction: column; gap: 40px; padding: 60px 20px; }
+            .nav-card.prev { border-right: none; padding-right: 0; border-bottom: 1px solid rgba(255,255,255,0.05); padding-bottom: 40px; }
+            .nav-card.next { padding-left: 0; text-align: left; }
         }
     </style>
 </head>
@@ -203,7 +231,7 @@ const validWipImages = project.wipImages?.filter((img: any) => img && img.asset)
         </div>
     </section>
 
-    {/* FINAL ARTWORK SECTION (Now uses validFinalImages length to prevent ghost headers) */}
+    {/* FINAL ARTWORK SECTION */}
     {validFinalImages.length > 0 && (
         <section class="gallery-container">
             <h2 class="gallery-heading">Final Artwork</h2>
@@ -215,7 +243,7 @@ const validWipImages = project.wipImages?.filter((img: any) => img && img.asset)
         </section>
     )}
 
-    {/* WIP SECTION (Now uses validWipImages length to prevent ghost headers) */}
+    {/* WIP SECTION */}
     {validWipImages.length > 0 && (
         <section class="gallery-container">
             <h2 class="gallery-heading">Work in Progress</h2>
@@ -226,6 +254,27 @@ const validWipImages = project.wipImages?.filter((img: any) => img && img.asset)
             </div>
         </section>
     )}
+
+    {/* --- NEW: PROJECT NAVIGATION --- */}
+    <div class="project-navigation reveal">
+        {prevProject ? (
+            <a href={`/project/${prevProject.slug.current}`} class="nav-card prev">
+                <span class="nav-label">Previous Project</span>
+                <h4 class="nav-title"><span>&larr;</span> {prevProject.title}</h4>
+            </a>
+        ) : (
+            <div class="nav-card prev" style="visibility: hidden;"></div>
+        )}
+        
+        {nextProject ? (
+            <a href={`/project/${nextProject.slug.current}`} class="nav-card next">
+                <span class="nav-label">Next Project</span>
+                <h4 class="nav-title">{nextProject.title} <span>&rarr;</span></h4>
+            </a>
+        ) : (
+            <div class="nav-card next" style="visibility: hidden;"></div>
+        )}
+    </div>
 
     <footer class="footer" style="text-align: center; padding: 100px 20px 60px;">
         <h2 style="font-family: 'Syne', sans-serif; font-size: 2.2rem; margin-bottom: 30px; color: #fff; letter-spacing: -0.01em;">Ready to start your project?</h2>
