@@ -6,7 +6,13 @@ export default {
     // CORE INFO (Homepage)
     { name: 'title', title: 'Project Title', type: 'string' },
     { name: 'slug', title: 'URL Slug', type: 'slug', options: { source: 'title', maxLength: 96 } },
-    { name: 'mainImage', title: 'Thumbnail', type: 'image', options: { hotspot: true } },
+    { 
+      name: 'mainImage', 
+      title: 'Thumbnail', 
+      type: 'image', 
+      options: { hotspot: true },
+      fields: [{ name: 'alt', type: 'string', title: 'Alt text (For SEO)' }] 
+    },
     { 
       name: 'tag', 
       title: 'Role / Service', 
@@ -24,18 +30,26 @@ export default {
     // DEEP DIVE (The project page)
     { name: 'description', title: 'Story / Process Text', type: 'text' },
     
-    // UPDATED: Split Gallery into WIP and Final Work
+    // UPDATED: Split Gallery into WIP and Final Work with Alt Text fields
     { 
       name: 'wipImages', 
       title: 'WIP (Work In Progress) Images', 
       type: 'array', 
-      of: [{ type: 'image', options: { hotspot: true } }] 
+      of: [{ 
+        type: 'image', 
+        options: { hotspot: true },
+        fields: [{ name: 'alt', type: 'string', title: 'Alt text (For SEO)' }]
+      }] 
     },
     { 
       name: 'finalImages', 
       title: 'Final Artwork', 
       type: 'array', 
-      of: [{ type: 'image', options: { hotspot: true } }] 
+      of: [{ 
+        type: 'image', 
+        options: { hotspot: true },
+        fields: [{ name: 'alt', type: 'string', title: 'Alt text (For SEO)' }]
+      }] 
     },
     
     { name: 'shortVideo', title: 'Cinematic Video (MP4)', type: 'file', options: { accept: 'video/*' } },

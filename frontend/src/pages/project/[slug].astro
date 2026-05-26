@@ -1,4 +1,5 @@
 ---
+import { ClientRouter } from 'astro:transitions';
 import '../../styles/global.css';
 import { client, urlFor } from '../../utils/sanity.js';
 
@@ -46,11 +47,11 @@ function getYouTubeId(url: string | undefined) {
 }
 const ytId = getYouTubeId(project.videoUrl);
 
-/* SAFETY FIX 1: Check if mainImage.asset actually exists before making URL */
-const posterUrl = project.mainImage && project.mainImage.asset ? urlFor(project.mainImage).width(1920).url() : '';
+/* SAFETY FIX 1: Check if mainImage.asset actually exists before making URL, format to WebP */
+const posterUrl = project.mainImage && project.mainImage.asset ? urlFor(project.mainImage).width(1920).auto('format').url() : '';
 
-/* Open Graph specific image URL (smaller for social sharing) */
-const ogImageUrl = project.mainImage && project.mainImage.asset ? urlFor(project.mainImage).width(1200).height(630).url() : '';
+/* Open Graph specific image URL (smaller for social sharing), format to WebP */
+const ogImageUrl = project.mainImage && project.mainImage.asset ? urlFor(project.mainImage).width(1200).height(630).auto('format').url() : '';
 
 /* SAFETY FIX 2: Pre-filter the arrays so ghost headers don't render */
 const validFinalImages = project.finalImages?.filter((img: any) => img && img.asset && img.asset._ref) || [];
@@ -63,6 +64,8 @@ const validWipImages = project.wipImages?.filter((img: any) => img && img.asset 
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>{project.title} — Studio A4</title>
+
+    <ClientRouter />
 
     {/* --- NEW: SEO & OPEN GRAPH METADATA --- */}
     <meta name="description" content={project.description ? project.description.substring(0, 150) + '...' : 'A creative project by Studio A4.'} />
@@ -122,10 +125,6 @@ const validWipImages = project.wipImages?.filter((img: any) => img && img.asset 
         }
         .social-btn:hover { background: #ff4d4d; color: #fff; transform: translateY(-2px); box-shadow: 0 4px 12px rgba(255, 77, 77, 0.2); }
 
-        .project-gallery { padding: 0 60px 120px; max-width: 1400px; margin: 0 auto; column-count: 2; column-gap: 30px; }
-        .gallery-img { width: 100%; margin-bottom: 30px; border-radius: 16px; display: block; break-inside: avoid; border: 1px solid rgba(255,255,255,0.05); transition: transform 0.4s ease; }
-        .gallery-img:hover { transform: scale(1.01); }
-
         .cinematic-embed-wrapper { 
             margin-top: 45px; 
             width: 100%; 
@@ -150,7 +149,7 @@ const validWipImages = project.wipImages?.filter((img: any) => img && img.asset 
         .gallery-img-half { width: 100%; margin-bottom: 30px; border-radius: 16px; display: block; break-inside: avoid; border: 1px solid rgba(255,255,255,0.05); transition: transform 0.4s ease; }
         .gallery-img-half:hover { transform: scale(1.01); }
 
-        /* --- NEW: PROJECT NAVIGATION STYLES --- */
+        /* --- PROJECT NAVIGATION STYLES --- */
         .project-navigation { display: flex; justify-content: space-between; max-width: 1400px; margin: 0 auto; padding: 0 60px 80px; border-top: 1px solid rgba(255,255,255,0.1); padding-top: 80px; }
         .nav-card { flex: 1; text-decoration: none; display: flex; flex-direction: column; transition: transform 0.3s ease; }
         .nav-card:hover { transform: translateY(-5px); }
@@ -189,7 +188,7 @@ const validWipImages = project.wipImages?.filter((img: any) => img && img.asset 
                 autoplay muted loop playsinline 
             ></video>
         ) : project.mainImage && project.mainImage.asset ? (
-            <img src={posterUrl} alt={project.title} class="project-hero-media" />
+            <img src={posterUrl} alt={project.mainImage.alt || project.title} class="project-hero-media" />
         ) : null}
         
         <div class="project-hero-content reveal">
@@ -231,31 +230,41 @@ const validWipImages = project.wipImages?.filter((img: any) => img && img.asset 
         </div>
     </section>
 
-    {/* FINAL ARTWORK SECTION */}
+    {/* FINAL ARTWORK SECTION (Auto-format WebP + Dynamic Alt) */}
     {validFinalImages.length > 0 && (
         <section class="gallery-container">
             <h2 class="gallery-heading">Final Artwork</h2>
             <div class="final-grid">
                 {validFinalImages.map((image: any, index: number) => (
-                    <img src={urlFor(image).width(1920).url()} alt={`Final ${index + 1}`} class={`gallery-img-large reveal reveal-d${(index % 3) + 1}`} loading="lazy" />
+                    <img 
+                        src={urlFor(image).width(1920).auto('format').url()} 
+                        alt={image.alt || `Final Artwork ${index + 1} - ${project.title}`} 
+                        class={`gallery-img-large reveal reveal-d${(index % 3) + 1}`} 
+                        loading="lazy" 
+                    />
                 ))}
             </div>
         </section>
     )}
 
-    {/* WIP SECTION */}
+    {/* WIP SECTION (Auto-format WebP + Dynamic Alt) */}
     {validWipImages.length > 0 && (
         <section class="gallery-container">
             <h2 class="gallery-heading">Work in Progress</h2>
             <div class="wip-masonry">
                 {validWipImages.map((image: any, index: number) => (
-                    <img src={urlFor(image).width(800).url()} alt={`WIP ${index + 1}`} class={`gallery-img-half reveal reveal-d${(index % 3) + 1}`} loading="lazy" />
+                    <img 
+                        src={urlFor(image).width(800).auto('format').url()} 
+                        alt={image.alt || `Work in Progress ${index + 1} - ${project.title}`} 
+                        class={`gallery-img-half reveal reveal-d${(index % 3) + 1}`} 
+                        loading="lazy" 
+                    />
                 ))}
             </div>
         </section>
     )}
 
-    {/* --- NEW: PROJECT NAVIGATION --- */}
+    {/* PROJECT NAVIGATION */}
     <div class="project-navigation reveal">
         {prevProject ? (
             <a href={`/project/${prevProject.slug.current}`} class="nav-card prev">
@@ -284,11 +293,13 @@ const validWipImages = project.wipImages?.filter((img: any) => img && img.asset 
     </footer>
 
     <script>
-        const revealEls = document.querySelectorAll('.reveal');
-        const observer = new IntersectionObserver((entries) => {
-            entries.forEach(e => { if(e.isIntersecting) e.target.classList.add('visible'); });
-        }, { threshold: 0.05 });
-        revealEls.forEach(el => observer.observe(el));
+        document.addEventListener('astro:page-load', () => {
+            const revealEls = document.querySelectorAll('.reveal');
+            const observer = new IntersectionObserver((entries) => {
+                entries.forEach(e => { if(e.isIntersecting) e.target.classList.add('visible'); });
+            }, { threshold: 0.05 });
+            revealEls.forEach(el => observer.observe(el));
+        });
     </script>
 </body>
 </html>

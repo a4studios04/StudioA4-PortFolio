@@ -1,11 +1,12 @@
 ---
+import { ClientRouter } from 'astro:transitions';
 import '../styles/global.css';
 import { client, urlFor } from '../utils/sanity.js';
 
-// Fetch Projects with explicit order
+// Fetch Projects
 const projects = await client.fetch(`*[_type == "project"] | order(projectNumber asc)`);
 
-// Fetch Testimonials
+// Fetch Testimonials AND expand the project reference to get the URL slug
 const testimonials = await client.fetch(`
     *[_type == "testimonial"] | order(_createdAt desc) {
         ...,
@@ -23,6 +24,8 @@ const testimonials = await client.fetch(`
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>StudioA4</title>
 
+    <ClientRouter />
+
     <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
     <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
     <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
@@ -32,6 +35,7 @@ const testimonials = await client.fetch(`
     <link href="https://fonts.googleapis.com/css2?family=DM+Sans:opsz,wght@9..40,300;9..40,400;9..40,500;9..40,600;9..40,700;9..40,800&family=Syne:wght@400;500;600;700;800&display=swap" rel="stylesheet">
 
     <style>
+        /* Sleek style for the new Preview Work button */
         .preview-work-btn {
             font-size: 0.85rem;
             color: rgba(255,255,255,0.3);
@@ -125,10 +129,10 @@ const testimonials = await client.fetch(`
                 {projects.map((project: any, index: number) => (
                     <a href={`/project/${project.slug?.current}`} class={`work-item reveal reveal-d${(index % 4) + 1}`} style="display: block; text-decoration: none;">
                         <div class="work-item-inner">
-                            {project.mainImage ? (
+                            {project.mainImage && project.mainImage.asset ? (
                                 <img 
-                                    src={urlFor(project.mainImage).width(800).url()} 
-                                    alt={project.title} 
+                                    src={urlFor(project.mainImage).width(800).auto('format').url()} 
+                                    alt={project.mainImage.alt || project.title} 
                                     class="work-item-bg"
                                     loading="lazy"
                                 />
@@ -309,7 +313,7 @@ const testimonials = await client.fetch(`
                         <input type="checkbox" name="botcheck" class="hidden" style="display: none;">
                         
                         <div class="form-group"><input type="text" name="name" placeholder="Your Name" required class="form-input"></div>
-                        <div class="form-group"><input type="email" name="email" placeholder="Your Email Address" required class="form-input"></div>
+                        <div class="form-group"><input type="email" name="email" placeholder="Your Email Address" required pattern="[a-z0-9._%+\-]+@[a-z0-9.\-]+\.[a-z]{2,}$" title="Please enter a valid email address (e.g., name@domain.com)" class="form-input"></div>
                         <div class="form-group"><textarea name="message" placeholder="Tell us about your project..." required class="form-input form-textarea"></textarea></div>
                         
                         <button type="submit" class="btn btn-primary" style="width: 100%; justify-content: center;">Send Message<span class="arrow-icon">→</span></button>
@@ -331,7 +335,6 @@ const testimonials = await client.fetch(`
                 <img src="/favicon.svg" alt="Studio A4 Logo" style="margin-top: 12px; line-height: 1.7;" />
                 <p>A creative studio crafting bold visual experiences for ambitious projects worldwide.</p>
                 
-                {/* --- UPDATED EMAIL BUTTON --- */}
                 <button id="copyEmailBtn" class="social-btn" style="margin-top: 15px; cursor: pointer; border: 1px solid rgba(255, 77, 77, 0.25); background: transparent; color: #ff4d4d; border-radius: 50px; padding: 10px 20px; font-family: 'DM Sans';">
                     studio.a4global@gmail.com
                 </button>
@@ -359,118 +362,120 @@ const testimonials = await client.fetch(`
     </footer>
 
     <script>
-        // COPY EMAIL SCRIPT
-        const copyEmailBtn = document.getElementById('copyEmailBtn');
-        copyEmailBtn?.addEventListener('click', () => {
-            navigator.clipboard.writeText('studio.a4global@gmail.com');
-            const originalText = copyEmailBtn.innerText;
-            copyEmailBtn.innerText = 'Copied!';
-            setTimeout(() => copyEmailBtn.innerText = 'studio.a4global@gmail.com', 2000);
-        });
-
-        // MOBILE MENU
-        const hamburger = document.getElementById('hamburger');
-        const mobileMenu = document.getElementById('mobileMenu');
-        const mobileLinks = document.querySelectorAll('.mobile-link');
-
-        if (hamburger && mobileMenu) {
-            hamburger.addEventListener('click', () => {
-                hamburger?.classList.toggle('active');
-                mobileMenu?.classList.toggle('active');
-                document.body.style.overflow = mobileMenu?.classList.contains('active') ? 'hidden' : '';
+        document.addEventListener('astro:page-load', () => {
+            // COPY EMAIL SCRIPT
+            const copyEmailBtn = document.getElementById('copyEmailBtn');
+            copyEmailBtn?.addEventListener('click', () => {
+                navigator.clipboard.writeText('studio.a4global@gmail.com');
+                const originalText = copyEmailBtn.innerText;
+                copyEmailBtn.innerText = 'Copied!';
+                setTimeout(() => copyEmailBtn.innerText = 'studio.a4global@gmail.com', 2000);
             });
-        }
 
-        if (mobileLinks) {
-            mobileLinks.forEach((link: any) => {
-                link.addEventListener('click', () => {
-                    hamburger?.classList.remove('active');
-                    mobileMenu?.classList.remove('active');
-                    document.body.style.overflow = '';
+            // MOBILE MENU
+            const hamburger = document.getElementById('hamburger');
+            const mobileMenu = document.getElementById('mobileMenu');
+            const mobileLinks = document.querySelectorAll('.mobile-link');
+
+            if (hamburger && mobileMenu) {
+                hamburger.addEventListener('click', () => {
+                    hamburger?.classList.toggle('active');
+                    mobileMenu?.classList.toggle('active');
+                    document.body.style.overflow = mobileMenu?.classList.contains('active') ? 'hidden' : '';
                 });
-            });
-        }
+            }
 
-        // ULTRA-RESPONSIVE INTERSECTION OBSERVER
-        const revealEls = document.querySelectorAll('.reveal');
-        if (revealEls.length > 0) {
-            const revealObserver = new IntersectionObserver((entries: any[]) => {
-                entries.forEach((entry: any) => {
-                    if (entry.isIntersecting) {
-                        entry.target.classList.add('visible');
-                        revealObserver.unobserve(entry.target);
+            if (mobileLinks) {
+                mobileLinks.forEach((link: any) => {
+                    link.addEventListener('click', () => {
+                        hamburger?.classList.remove('active');
+                        mobileMenu?.classList.remove('active');
+                        document.body.style.overflow = '';
+                    });
+                });
+            }
+
+            // ULTRA-RESPONSIVE INTERSECTION OBSERVER
+            const revealEls = document.querySelectorAll('.reveal');
+            if (revealEls.length > 0) {
+                const revealObserver = new IntersectionObserver((entries: any[]) => {
+                    entries.forEach((entry: any) => {
+                        if (entry.isIntersecting) {
+                            entry.target.classList.add('visible');
+                            revealObserver.unobserve(entry.target);
+                        }
+                    });
+                }, { threshold: 0.01, rootMargin: '0px 0px -40px 0px' });
+                revealEls.forEach((el: any) => revealObserver.observe(el));
+            }
+
+            // PARALLAX ORB ON MOUSE MOVE
+            const orb1 = document.querySelector('.orb-1') as HTMLElement | null;
+            const orb2 = document.querySelector('.orb-2') as HTMLElement | null;
+            document.addEventListener('mousemove', (e: MouseEvent) => {
+                const x = (e.clientX - window.innerWidth / 2) / 60;
+                const y = (e.clientY - window.innerHeight / 2) / 60;
+                if (orb1) orb1.style.transform = `translate(${x * 18}px, ${y * 18}px)`;
+                if (orb2) orb2.style.transform = `translate(${-x * 14}px, ${-y * 14}px)`;
+            });
+
+            // ACTIVE NAV LINK ON SCROLL
+            const sections = document.querySelectorAll('section[id]');
+            const navLinksAll = document.querySelectorAll('.nav-links a');
+            window.addEventListener('scroll', () => {
+                let current = '';
+                sections.forEach((section: any) => {
+                    const sectionTop = section.offsetTop - 120;
+                    if (window.scrollY >= sectionTop) current = section.getAttribute('id');
+                });
+                navLinksAll.forEach((link: any) => {
+                    if(link.getAttribute('href') === '#' + current) {
+                        link.style.color = '#ff4d4d';
+                    } else {
+                        link.style.color = '#fff';
                     }
                 });
-            }, { threshold: 0.01, rootMargin: '0px 0px -40px 0px' });
-            revealEls.forEach((el: any) => revealObserver.observe(el));
-        }
-
-        // PARALLAX ORB ON MOUSE MOVE
-        const orb1 = document.querySelector('.orb-1') as HTMLElement | null;
-        const orb2 = document.querySelector('.orb-2') as HTMLElement | null;
-        document.addEventListener('mousemove', (e: MouseEvent) => {
-            const x = (e.clientX - window.innerWidth / 2) / 60;
-            const y = (e.clientY - window.innerHeight / 2) / 60;
-            if (orb1) orb1.style.transform = `translate(${x * 18}px, ${y * 18}px)`;
-            if (orb2) orb2.style.transform = `translate(${-x * 14}px, ${-y * 14}px)`;
-        });
-
-        // ACTIVE NAV LINK ON SCROLL
-        const sections = document.querySelectorAll('section[id]');
-        const navLinksAll = document.querySelectorAll('.nav-links a');
-        window.addEventListener('scroll', () => {
-            let current = '';
-            sections.forEach((section: any) => {
-                const sectionTop = section.offsetTop - 120;
-                if (window.scrollY >= sectionTop) current = section.getAttribute('id');
             });
-            navLinksAll.forEach((link: any) => {
-                if(link.getAttribute('href') === '#' + current) {
-                    link.style.color = '#ff4d4d';
-                } else {
-                    link.style.color = '#fff';
-                }
-            });
-        });
 
-        // CONTACT FORM BACKGROUND SUBMISSION
-        const contactForm = document.getElementById('contactForm') as HTMLFormElement | null;
-        const formSuccess = document.getElementById('formSuccess') as HTMLElement | null;
+            // CONTACT FORM BACKGROUND SUBMISSION
+            const contactForm = document.getElementById('contactForm') as HTMLFormElement | null;
+            const formSuccess = document.getElementById('formSuccess') as HTMLElement | null;
 
-        if (contactForm && formSuccess) {
-            contactForm.addEventListener('submit', function(e: Event) {
-                e.preventDefault();
-                const submitBtn = contactForm.querySelector('button[type="submit"]') as HTMLButtonElement | null;
-                if (!submitBtn) return;
+            if (contactForm && formSuccess) {
+                contactForm.addEventListener('submit', function(e: Event) {
+                    e.preventDefault();
+                    const submitBtn = contactForm.querySelector('button[type="submit"]') as HTMLButtonElement | null;
+                    if (!submitBtn) return;
 
-                const originalBtnText = submitBtn.innerHTML;
-                submitBtn.innerHTML = 'Sending...';
-                submitBtn.style.opacity = '0.7';
-                submitBtn.style.cursor = 'not-allowed';
+                    const originalBtnText = submitBtn.innerHTML;
+                    submitBtn.innerHTML = 'Sending...';
+                    submitBtn.style.opacity = '0.7';
+                    submitBtn.style.cursor = 'not-allowed';
 
-                const formData = new FormData(contactForm);
+                    const formData = new FormData(contactForm);
 
-                fetch('https://api.web3forms.com/submit', { method: 'POST', body: formData })
-                .then(async (response) => {
-                    if (response.status == 200) {
-                        contactForm.style.display = 'none';
-                        formSuccess.style.display = 'block';
-                    } else {
+                    fetch('https://api.web3forms.com/submit', { method: 'POST', body: formData })
+                    .then(async (response) => {
+                        if (response.status == 200) {
+                            contactForm.style.display = 'none';
+                            formSuccess.style.display = 'block';
+                        } else {
+                            submitBtn.innerHTML = originalBtnText;
+                            submitBtn.style.opacity = '1';
+                            submitBtn.style.cursor = 'pointer';
+                            alert('Something went wrong. Please try again.');
+                        }
+                    })
+                    .catch((error: any) => {
+                        console.error(error);
                         submitBtn.innerHTML = originalBtnText;
                         submitBtn.style.opacity = '1';
                         submitBtn.style.cursor = 'pointer';
-                        alert('Something went wrong. Please try again.');
-                    }
-                })
-                .catch((error: any) => {
-                    console.error(error);
-                    submitBtn.innerHTML = originalBtnText;
-                    submitBtn.style.opacity = '1';
-                    submitBtn.style.cursor = 'pointer';
-                    alert('Something went wrong. Please check your connection.');
+                        alert('Something went wrong. Please check your connection.');
+                    });
                 });
-            });
-        }
+            }
+        });
     </script>
 </body>
 </html>
